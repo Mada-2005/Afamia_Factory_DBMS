@@ -1,0 +1,85 @@
+@page
+@model FactorySystemWebpage.Pages.Customers.CreateModel
+@{
+    ViewData["Title"] = "Create Customer";
+}
+
+<h1><i class="bi bi-plus-circle"></i> Create New Customer</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Customer.CustomerName" class="form-label"></label>
+                        <input asp-for="Customer.CustomerName" class="form-control" />
+                        <span asp-validation-for="Customer.CustomerName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.CustomerType" class="form-label"></label>
+                        <select asp-for="Customer.CustomerType" class="form-select">
+                            <option value="">-- Select Type --</option>
+                            <option value="Trader">Trader</option>
+                            <option value="Supermarket">Supermarket</option>
+                            <option value="Distributor">Distributor</option>
+                        </select>
+                        <span asp-validation-for="Customer.CustomerType" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.ContactPerson" class="form-label"></label>
+                        <input asp-for="Customer.ContactPerson" class="form-control" />
+                        <span asp-validation-for="Customer.ContactPerson" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Customer.Phone" class="form-label"></label>
+                            <input asp-for="Customer.Phone" class="form-control" />
+                            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Customer.Email" class="form-label"></label>
+                            <input asp-for="Customer.Email" class="form-control" type="email" />
+                            <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.DeliveryLocation" class="form-label"></label>
+                        <input asp-for="Customer.DeliveryLocation" class="form-control" />
+                        <span asp-validation-for="Customer.DeliveryLocation" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.Address" class="form-label"></label>
+                        <textarea asp-for="Customer.Address" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Customer.Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="Customer.IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="Customer.IsActive" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Create
+                        </button>
+                        <a asp-page="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

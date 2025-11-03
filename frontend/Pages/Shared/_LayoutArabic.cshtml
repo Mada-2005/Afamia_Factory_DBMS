@@ -1,0 +1,159 @@
+@using FactorySystemWebpage.Helpers
+@{
+    var isArabic = Context.Session.GetString("Language") == "ar";
+    var isLoggedIn = Context.Session.IsLoggedIn();
+    var isAdmin = Context.Session.IsAdmin();
+    var fullName = Context.Session.GetFullName();
+}
+<!DOCTYPE html>
+<html lang="@(isArabic ? "ar" : "en")" dir="@(isArabic ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @(isArabic ? "نظام إدارة المصنع" : "Factory Management System")</title>
+
+    @if (isArabic)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    }
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-page="/Index">
+                    <i class="bi bi-factory"></i> @(isArabic ? "نظام إدارة المصنع" : "Factory Management System")
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-page="@(isAdmin ? "/Dashboard/Admin/Index" : "/Dashboard/Employee/Index")">
+                                    <i class="bi bi-house-door"></i> @(isArabic ? "الرئيسية" : "Home")
+                                </a>
+                            </li>
+
+                            @if (isAdmin)
+                            {
+                                <!-- Admin Menu -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-box-seam"></i> @(isArabic ? "المخزون" : "Inventory")
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-page="/RawMaterials/Index"><i class="bi bi-bag"></i> @(isArabic ? "المواد الخام" : "Raw Materials")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Products/Index"><i class="bi bi-basket"></i> @(isArabic ? "المنتجات" : "Products")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Inventory/Index"><i class="bi bi-building"></i> @(isArabic ? "المستودع" : "Warehouse")</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-people"></i> @(isArabic ? "الموظفون" : "Employees")
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-page="/Employees/Index"><i class="bi bi-person-badge"></i> @(isArabic ? "قائمة الموظفين" : "Employee List")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Dashboard/Admin/Attendance"><i class="bi bi-calendar-check"></i> @(isArabic ? "الحضور" : "Attendance")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Dashboard/Admin/Payroll"><i class="bi bi-cash"></i> @(isArabic ? "الرواتب" : "Payroll")</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-gear"></i> @(isArabic ? "الإنتاج" : "Production")
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-page="/ProductionRooms/Index"><i class="bi bi-building"></i> @(isArabic ? "غرف الإنتاج" : "Production Rooms")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Dashboard/Admin/ProductionTracking"><i class="bi bi-graph-up"></i> @(isArabic ? "تتبع الإنتاج" : "Production Tracking")</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-briefcase"></i> @(isArabic ? "الأعمال" : "Business")
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-page="/Vendors/Index"><i class="bi bi-truck"></i> @(isArabic ? "الموردون" : "Vendors")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Customers/Index"><i class="bi bi-shop"></i> @(isArabic ? "العملاء" : "Customers")</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <!-- Employee Menu -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Dashboard/Employee/MyAttendance">
+                                        <i class="bi bi-calendar-check"></i> @(isArabic ? "حضوري" : "My Attendance")
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Dashboard/Employee/MyPayroll">
+                                        <i class="bi bi-cash"></i> @(isArabic ? "راتبي" : "My Payroll")
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-plus-circle"></i> @(isArabic ? "إضافة" : "Add")
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-page="/RawMaterials/Create"><i class="bi bi-bag"></i> @(isArabic ? "استلام مواد خام" : "Receive Raw Material")</a></li>
+                                        <li><a class="dropdown-item" asp-page="/Products/Create"><i class="bi bi-basket"></i> @(isArabic ? "تسجيل منتج" : "Log Product")</a></li>
+                                    </ul>
+                                </li>
+                            }
+
+                            <!-- Product Search (Available to all) -->
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-page="/ProductSearch">
+                                    <i class="bi bi-search"></i> @(isArabic ? "البحث عن منتج" : "Product Search")
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> @fullName
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="?lang=en"><i class="bi bi-translate"></i> English</a></li>
+                                    <li><a class="dropdown-item" href="?lang=ar"><i class="bi bi-translate"></i> العربية</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-page="/Logout"><i class="bi bi-box-arrow-right"></i> @(isArabic ? "تسجيل الخروج" : "Logout")</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - @(isArabic ? "نظام إدارة المصنع" : "Factory Management System")
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

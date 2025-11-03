@@ -1,0 +1,86 @@
+@page
+@model FactorySystemWebpage.Pages.Dashboard.Admin.PayrollModel
+@{
+    ViewData["Title"] = Model.Translate("Manage Payroll", "إدارة الرواتب");
+    Layout = "~/Pages/Shared/_LayoutArabic.cshtml";
+}
+
+<div class="mb-4">
+    <h1><i class="bi bi-cash"></i> @Model.Translate("Manage Payroll", "إدارة الرواتب")</h1>
+    <p class="lead text-muted">@Model.Translate("Process and manage employee payroll", "معالجة وإدارة رواتب الموظفين")</p>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">@Model.Translate("Filter Payroll", "تصفية الرواتب")</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">@Model.Translate("Month", "الشهر")</label>
+                <select class="form-select" name="month">
+                    <option value="">@Model.Translate("Select Month", "اختر الشهر")</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@Model.Translate("Year", "السنة")</label>
+                <select class="form-select" name="year">
+                    <option value="">@Model.Translate("Select Year", "اختر السنة")</option>
+                    @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 5; i--)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@Model.Translate("Employee", "الموظف")</label>
+                <select class="form-select" name="employeeId">
+                    <option value="">@Model.Translate("All Employees", "جميع الموظفين")</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-filter"></i> @Model.Translate("Filter", "تصفية")
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">@Model.Translate("Payroll Records", "سجلات الرواتب")</h5>
+        <button class="btn btn-light btn-sm">
+            <i class="bi bi-plus-circle"></i> @Model.Translate("Process New Payroll", "معالجة راتب جديد")
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>@Model.Translate("Employee", "الموظف")</th>
+                        <th>@Model.Translate("Month/Year", "الشهر/السنة")</th>
+                        <th>@Model.Translate("Base Salary", "الراتب الأساسي")</th>
+                        <th>@Model.Translate("Bonus", "المكافأة")</th>
+                        <th>@Model.Translate("Deductions", "الخصومات")</th>
+                        <th>@Model.Translate("Total", "الإجمالي")</th>
+                        <th>@Model.Translate("Hours", "الساعات")</th>
+                        <th>@Model.Translate("Actions", "الإجراءات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">
+                            <i class="bi bi-info-circle"></i> @Model.Translate("Connect to database to view payroll records", "اتصل بقاعدة البيانات لعرض سجلات الرواتب")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

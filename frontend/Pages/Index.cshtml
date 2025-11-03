@@ -1,0 +1,102 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-3 fw-bold">
+        <i class="bi bi-factory text-primary"></i> Factory Management System
+    </h1>
+    <p class="lead text-muted">Complete traceability from raw materials to distribution</p>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+            <div class="card-body">
+                <i class="bi bi-box-seam display-1 text-primary"></i>
+                <h5 class="card-title mt-3">Inventory Management</h5>
+                <p class="card-text">Track raw materials and finished products with expiration monitoring</p>
+                <a asp-page="/RawMaterials/Index" class="btn btn-outline-primary">View Inventory</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+            <div class="card-body">
+                <i class="bi bi-gear display-1 text-success"></i>
+                <h5 class="card-title mt-3">Production</h5>
+                <p class="card-text">Monitor production rooms, lines, and track product manufacturing</p>
+                <a asp-page="/ProductionRooms/Index" class="btn btn-outline-success">View Production</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+            <div class="card-body">
+                <i class="bi bi-people display-1 text-info"></i>
+                <h5 class="card-title mt-3">Employee Management</h5>
+                <p class="card-text">Track attendance, schedules, and automated payroll processing</p>
+                <a asp-page="/Employees/Index" class="btn btn-outline-info">View Employees</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+            <div class="card-body">
+                <i class="bi bi-send display-1 text-warning"></i>
+                <h5 class="card-title mt-3">Distribution</h5>
+                <p class="card-text">Manage customers, shipments, and delivery coordination</p>
+                <a asp-page="/Customers/Index" class="btn btn-outline-warning">View Distribution</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Key Features</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Complete product traceability by product code</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Real-time raw material tracking</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Employee attendance and production line assignments</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Automated payroll processing</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Inventory management with expiration tracking</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Customer and distribution coordination</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-list-check"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-page="/Products/Create" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Log New Product
+                    </a>
+                    <a asp-page="/RawMaterials/Create" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Receive Raw Material
+                    </a>
+                    <a asp-page="/Dashboard/Attendance" class="btn btn-info">
+                        <i class="bi bi-calendar-check"></i> Record Attendance
+                    </a>
+                    <a asp-page="/Dashboard/Index" class="btn btn-warning">
+                        <i class="bi bi-speedometer2"></i> View Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+@page
+@model FactorySystemWebpage.Pages.ProductionRooms.CreateModel
+@{
+    ViewData["Title"] = "Create Production Room";
+}
+
+<h1><i class="bi bi-plus-circle"></i> Create New Production Room</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="ProductionRoom.RoomName" class="form-label"></label>
+                        <input asp-for="ProductionRoom.RoomName" class="form-control" placeholder="e.g., Room 2 - Biscuit Production" />
+                        <span asp-validation-for="ProductionRoom.RoomName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProductionRoom.RoomType" class="form-label"></label>
+                        <select asp-for="ProductionRoom.RoomType" class="form-select">
+                            <option value="">-- Select Type --</option>
+                            <option value="Crackers">Crackers</option>
+                            <option value="Biscuits">Biscuits</option>
+                            <option value="Peanuts">Peanuts</option>
+                            <option value="Snacks">Snacks</option>
+                        </select>
+                        <span asp-validation-for="ProductionRoom.RoomType" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProductionRoom.Location" class="form-label"></label>
+                        <input asp-for="ProductionRoom.Location" class="form-control" placeholder="e.g., Building B" />
+                        <span asp-validation-for="ProductionRoom.Location" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProductionRoom.Description" class="form-label"></label>
+                        <textarea asp-for="ProductionRoom.Description" class="form-control" rows="3" placeholder="Additional details about this production room"></textarea>
+                        <span asp-validation-for="ProductionRoom.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="ProductionRoom.IsActive" class="form-check-input" type="checkbox" checked />
+                        <label asp-for="ProductionRoom.IsActive" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Create
+                        </button>
+                        <a asp-page="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6 class="card-title">Production Room Types</h6>
+                <ul class="small">
+                    <li><strong>Crackers:</strong> For cracker production</li>
+                    <li><strong>Biscuits:</strong> For biscuit production</li>
+                    <li><strong>Peanuts:</strong> For peanut processing</li>
+                    <li><strong>Snacks:</strong> For snack production</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
