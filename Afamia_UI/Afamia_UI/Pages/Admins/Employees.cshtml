@@ -1,0 +1,56 @@
+﻿@page
+@model Afamia_UI.Pages.Admins.EmployeesModel
+@{
+    ViewData["Title"] = "Employees View";
+}
+
+
+
+
+<a class="btn btn-primary mb-3" asp-page="/Admins/AddEmployee">
+    Add New Employee
+</a>
+
+<table class="table table-bordered border-primary">
+    <tr class="table-primary">
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Role</th>
+        <th>WorksInFactory</th>
+        <th>Phone Numbers</th>
+        <th>Available Actions</th>
+    </tr>
+    @foreach (var employee in Model.employees)
+    {
+        <tr>
+            <td>@employee.Id</td>
+            <td>@employee.FName</td>
+            <td>@employee.LName</td>
+            <td>@employee.role</td>
+            <td>@(employee.Works_in_Factory ? "Yes" : "No")</td>
+            <td>
+                @if (employee.Phone != null)
+                {
+                    <ul>
+                        @foreach (var phone in employee.Phone)
+                        {
+                            <li>@phone</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>No phone numbers available</span>
+                }
+            </td>
+            <td>
+                <a class="btn btn-primary btn-sm" asp-page="/Admins/Edit" asp-route-id="@employee.Id">Edit</a>
+                <form method="post" asp-page-handler="Delete" style="display: inline;">
+                    <input type="hidden" name="id" value="@employee.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete?');">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+}

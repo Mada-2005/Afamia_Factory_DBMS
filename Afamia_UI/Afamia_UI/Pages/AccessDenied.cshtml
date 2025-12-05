@@ -1,0 +1,87 @@
+﻿@page
+@model Afamia_UI.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Access Denied</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 50px;
+        }
+
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-left: 5px solid #dc3545;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #dc3545;
+            margin-top: 0;
+        }
+
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+            .button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>🚫 Access Denied</h1>
+        <p><strong>You do not have permission to access this page.</strong></p>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="info-box">
+                <p><strong>Current User Information:</strong></p>
+                <ul>
+                    <li>Username: <strong>@User.Identity.Name</strong></li>
+                    <li>Role: <strong>@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</strong></li>
+                    <li>Authenticated: <strong>Yes</strong></li>
+                </ul>
+                <p>This page requires a different role than what you currently have.</p>
+            </div>
+        }
+        else
+        {
+            <div class="info-box">
+                <p><strong>You are not logged in.</strong></p>
+                <p>Please log in to access this resource.</p>
+            </div>
+        }
+
+        <hr />
+
+        <p><strong>What you can do:</strong></p>
+        <a href="/Login" class="button">Go to Login</a>
+        <a href="/" class="button">Go to Home</a>
+    </div>
+</body>
+</html>
