@@ -110,6 +110,84 @@ namespace Afamia_UI.Models.Queries
                 return null;
             }
         }
+        public List<Employee> GetEmployeeByName(string FName)
+        {
+            List<Employee> employees = new List<Employee>();
+           
+            try
+            {
+                using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
+                {
+                    con.Open();
+                    string sql = "Select Employee.*, PhoneData.Phone_Numbers\r\nFrom Employee \r\nLeft join(\r\n\tSelect Employee_ID, STRING_AGG(Phone, ', ') As Phone_Numbers\r\n\tFrom Employee_phone_numbers\r\n\tGroup By Employee_ID\r\n\t)\r\nAs PhoneData on Employee_ID = Id\r\nwhere FName = @FName\r\n";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@FName", FName);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Employee emp = new Employee
+                        {
+                            Id = reader.GetInt32(0),
+                            FName = reader.GetString(1),
+                            LName = reader.GetString(2),
+                            role = reader.GetString(3),
+                            Works_in_Factory = reader.GetBoolean(4),
+                        };
+                        if (!reader.IsDBNull(5))
+                        {
+                            emp.Phone.AddRange(reader.GetString(5).Split(", "));
+                        }
+                        employees.Add(emp);
+                    }
+                    return employees;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public List<Employee> GetEmployeeByName(string FName, string LName)
+        {
+            
+            List<Employee> employees = new List<Employee>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
+                {
+                    con.Open();
+                    string sql = "Select Employee.*, PhoneData.Phone_Numbers\r\nFrom Employee \r\nLeft join(\r\n\tSelect Employee_ID, STRING_AGG(Phone, ', ') As Phone_Numbers\r\n\tFrom Employee_phone_numbers\r\n\tGroup By Employee_ID\r\n\t)\r\nAs PhoneData on Employee_ID = Id\r\nwhere FName = @FName and LName = @LName\r\n";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@FName", FName);
+                    cmd.Parameters.AddWithValue("@LName", LName);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Employee emp = new Employee
+                        {
+                            Id = reader.GetInt32(0),
+                            FName = reader.GetString(1),
+                            LName = reader.GetString(2),
+                            role = reader.GetString(3),
+                            Works_in_Factory = reader.GetBoolean(4),
+                        };
+                        if (!reader.IsDBNull(5))
+                        {
+                            emp.Phone.AddRange(reader.GetString(5).Split(", "));
+                        }
+                        employees.Add(emp);
+                    }
+                    return employees;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
 
         public void EditEmployee(Employee emp)
         {
@@ -226,6 +304,26 @@ namespace Afamia_UI.Models.Queries
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+        public int GetNumOfActiveEmployees()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
+                {
+                    con.Open();
+                    string sql = "\r\nSelect count(ID) \r\nfrom Employee\r\nwhere Works_in_Factory = 1";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    int n = Convert.ToInt32(cmd.ExecuteScalar());
+                    return n;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
         }
 
     }

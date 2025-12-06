@@ -1,0 +1,24 @@
+﻿@page
+@model Afamia_UI.Pages.Admins.AddProductionRoomModel
+@{
+    ViewData["Title"] = "Add Production Room";
+}
+
+
+<form method="post" asp-page-handler="Submit">
+    <div class="row">
+
+        <div class="col-md-2 mb-3">
+            <label asp-for="productionRoom.Id" class="form-label">ID</label>
+            <input type="text" class="form-control" asp-for="productionRoom.Id">
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <label asp-for="productionRoom.Place" class="form-label">Place</label>
+            <input type="text" class="form-control" asp-for="productionRoom.Place">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
