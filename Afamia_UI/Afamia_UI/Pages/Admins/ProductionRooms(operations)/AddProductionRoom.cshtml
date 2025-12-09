@@ -4,6 +4,12 @@
     ViewData["Title"] = "Add Production Room";
 }
 
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
 
 <form method="post" asp-page-handler="Submit">
     <div class="row">

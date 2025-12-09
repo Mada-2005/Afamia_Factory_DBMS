@@ -1,0 +1,35 @@
+@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations.ProductionLines.PipelineSections.AddPipelineSectionModel
+@{
+    ViewData["Title"] = "Add Pipeline Section";
+}
+
+<h1>Add New Pipeline Section</h1>
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.ID" class="form-label">Section ID (read only)</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.ID" readonly>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.Name" class="form-label">Name</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.Name">
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.Pipeline_ID" class="form-label">Pipeline ID (Read Only)</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.Pipeline_ID" readonly>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Pipeline Section</button>
+</form>

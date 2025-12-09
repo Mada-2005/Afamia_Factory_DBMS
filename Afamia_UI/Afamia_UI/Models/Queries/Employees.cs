@@ -326,5 +326,33 @@ namespace Afamia_UI.Models.Queries
             }
         }
 
+        public bool IsPhoneTaken(string phone)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
+                {
+                    con.Open();
+                    string sql = "SELECT TOP 2 * FROM Employee_Phone_numbers WHERE Phone = @phone";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@phone", phone);
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    int count = 0;
+                    while (rdr.Read())
+                    {
+                        count++;
+                    }
+                    return count > 0;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
     }
 }

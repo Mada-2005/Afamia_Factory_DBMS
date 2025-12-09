@@ -1,0 +1,38 @@
+@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations.ProductionLines.PipelineSections.EditPipelineSectionModel
+@{
+    ViewData["Title"] = "Edit Pipeline Section";
+}
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form method="post" asp-page-handler="Submit">
+    <input type="hidden" asp-for="OldId" />
+    <input type="hidden" asp-for="OldPipelineId" />
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.ID" class="form-label">Section ID (Read Only)</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.ID" readonly>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.Name" class="form-label">Name</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.Name">
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="pipelineSection.Pipeline_ID" class="form-label">Pipeline ID</label>
+            <input type="text" class="form-control" asp-for="pipelineSection.Pipeline_ID">
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

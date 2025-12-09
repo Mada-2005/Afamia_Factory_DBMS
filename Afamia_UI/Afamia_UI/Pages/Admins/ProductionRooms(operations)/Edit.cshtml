@@ -1,0 +1,30 @@
+@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations.EditProductionRoomModel
+@{
+    ViewData["Title"] = "Edit Production Room";
+}
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form method="post" asp-page-handler="Submit">
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="productionRoom.Id" class="form-label">ID (Read Only)</label>
+            <input type="text" class="form-control" asp-for="productionRoom.Id" readonly>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="productionRoom.Place" class="form-label">Place</label>
+            <input type="text" class="form-control" asp-for="productionRoom.Place">
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

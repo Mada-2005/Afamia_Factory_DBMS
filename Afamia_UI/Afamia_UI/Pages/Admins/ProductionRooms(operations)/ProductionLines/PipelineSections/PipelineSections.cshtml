@@ -1,0 +1,51 @@
+@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations.ProductionLines.PipelineSections.PipelineSectionsModel
+@{
+    ViewData["Title"] = "Pipeline Sections View";
+}
+
+<h1>Pipeline Sections for Pipeline ID: @Model.PipelineId</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <!-- Add Pipeline Section Button -->
+    <a class="btn btn-primary" asp-page="/Admins/ProductionRooms(Operations)/ProductionLines/PipelineSections/AddPipelineSection" asp-route-pipelineId="@Model.PipelineId">
+        Add New Pipeline Section
+    </a>
+
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <a class="btn btn-modern btn-modern-primary" asp-page="\Admins\ProductionRooms(operations)\ProductionLines\PipelineSections\AssignEmployee">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Assigned Employees
+    </a>
+</div>
+
+<table class="table table-bordered border-primary">
+    <tr class="table-primary">
+        <th>Section ID</th>
+        <th>Name</th>
+        <th>Pipeline ID</th>
+        <th>Actions</th>
+    </tr>
+@foreach (var section1 in Model.pipelineSections)
+{
+        <tr>
+            <td>@section1.ID</td>
+            <td>@section1.Name</td>
+            <td>@section1.Pipeline_ID</td>
+
+            <td>
+                <a class="btn btn-primary btn-sm" asp-page="/Admins/ProductionRooms(operations)/ProductionLines/PipelineSections/Edit" asp-route-id="@section1.ID" asp-route-pipelineId="@section1.Pipeline_ID">Edit</a>
+                <form method="post" asp-page-handler="Delete" style="display: inline;">
+                    <input type="hidden" name="id" value="@section1.ID" />
+                    <input type="hidden" name="pipelineId" value="@section1.Pipeline_ID" />
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete?');">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+}

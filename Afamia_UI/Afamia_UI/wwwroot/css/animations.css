@@ -1,0 +1,448 @@
+/* ============================================
+   AFAMIA UI - Advanced Animation System
+   ============================================
+   A comprehensive animation library for creating
+   stunning, professional UI interactions.
+
+   HOW TO USE THIS FILE:
+   ---------------------
+   1. This file is already imported in _Layout.cshtml
+   2. Simply add the CSS class names to your HTML elements
+   3. Example: <div class="animate-fade-in">Content</div>
+
+   FILE ORGANIZATION:
+   ------------------
+   1. Keyframe Animations (defines how animations move)
+   2. Utility Animation Classes (ready-to-use classes)
+   3. Hover Effects (mouse hover animations)
+   4. Button Animations (click and hover effects)
+   5. Card Animations (3D effects and transitions)
+   6. Input Animations (form field effects)
+   7. Table Animations (row hover effects)
+   8. Loading Animations (spinners and loaders)
+   9. Background Gradients (colorful backgrounds)
+   10. Glass Morphism (frosted glass effects)
+   11. Shadow Utilities (depth and elevation)
+   12. Text Animations (gradient and shimmer text)
+   ============================================ */
+
+/* ------------------------------------
+   1. KEYFRAME ANIMATIONS
+   ------------------------------------
+   These define HOW elements animate.
+   Use @keyframes to create custom movements.
+   ------------------------------------ */
+
+/* Simple fade in - element appears smoothly */
+@keyframes fadeIn {
+    from {
+        opacity: 0;              /* Start invisible */
+        transform: translateY(10px);  /* Start slightly below */
+    }
+    to {
+        opacity: 1;              /* End fully visible */
+        transform: translateY(0);     /* End at normal position */
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(13, 110, 253, 0.8), 0 0 30px rgba(13, 110, 253, 0.6);
+    }
+}
+
+/* ------------------------------------
+   2. UTILITY ANIMATION CLASSES
+   ------------------------------------
+   HOW TO USE: Add these classes to HTML elements
+   Example: <div class="animate-fade-in">Your content</div>
+
+   The "forwards" keeps the final animation state
+   The "ease-out" makes animation slow down at end
+   ------------------------------------ */
+
+/* Apply simple fade in animation to element */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.7s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.7s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+}
+
+/* ------------------------------------
+   STAGGER DELAYS - for sequential animations
+   ------------------------------------
+   Use these to make multiple elements animate one after another
+   Example:
+   <div class="animate-fade-in stagger-1">First item</div>
+   <div class="animate-fade-in stagger-2">Second item</div>
+   <div class="animate-fade-in stagger-3">Third item</div>
+   ------------------------------------ */
+.stagger-1 { animation-delay: 0.1s; }  /* Delays animation by 0.1 seconds */
+.stagger-2 { animation-delay: 0.2s; }  /* Delays animation by 0.2 seconds */
+.stagger-3 { animation-delay: 0.3s; }  /* Delays animation by 0.3 seconds */
+.stagger-4 { animation-delay: 0.4s; }  /* Delays animation by 0.4 seconds */
+.stagger-5 { animation-delay: 0.5s; }  /* Delays animation by 0.5 seconds */
+.stagger-6 { animation-delay: 0.6s; }  /* Delays animation by 0.6 seconds */
+
+/* ------------------------------------
+   3. HOVER EFFECTS
+   ------------------------------------
+   Apply these to elements that should react to mouse hover
+   The transition property makes changes smooth
+   ------------------------------------ */
+
+/* Lifts element up when you hover over it */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Smooth transition for all properties */
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);  /* Move up 5 pixels */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;  /* Add shadow for depth */
+}
+
+.hover-glow {
+    transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.3);
+    transform: translateY(-2px);
+}
+
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* ------------------------------------
+   4. BUTTON ANIMATIONS
+   ------------------------------------ */
+
+.btn-animated {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.btn-animated::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+}
+
+.btn-animated:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-slide {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-slide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: -1;
+}
+
+.btn-slide:hover::after {
+    left: 100%;
+}
+
+/* ------------------------------------
+   5. CARD ANIMATIONS
+   ------------------------------------ */
+
+.card-animated {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.card-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.1) 0%, rgba(111, 66, 193, 0.1) 100%);
+    pointer-events: none;
+}
+
+.card-animated:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.card-animated:hover::before {
+    opacity: 1;
+}
+
+/* ------------------------------------
+   6. INPUT ANIMATIONS
+   ------------------------------------ */
+
+.input-animated {
+    transition: all 0.3s ease;
+    border: 2px solid #e0e0e0;
+}
+
+.input-animated:focus {
+    transform: translateY(-2px);
+    border-color: #0d6efd;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+}
+
+/* ------------------------------------
+   7. TABLE ANIMATIONS
+   ------------------------------------ */
+
+.table-animated tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-animated tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+    transform: scale(1.01);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------------------------
+   8. LOADING ANIMATIONS
+   ------------------------------------ */
+
+.spinner-ring {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(13, 110, 253, 0.1);
+    border-top-color: #0d6efd;
+    border-radius: 50%;
+    animation: rotate360 1s linear infinite;
+}
+
+/* ------------------------------------
+   9. BACKGROUND GRADIENTS
+   ------------------------------------ */
+
+.gradient-bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-bg-success {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-bg-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.gradient-bg-blue {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.gradient-animated {
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ------------------------------------
+   10. GLASS MORPHISM EFFECTS
+   ------------------------------------ */
+
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------------
+   11. SHADOW UTILITIES
+   ------------------------------------ */
+
+.shadow-sm-hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.shadow-sm-hover:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-glow-blue {
+    box-shadow: 0 0 20px rgba(13, 110, 253, 0.4);
+}
+
+.shadow-glow-purple {
+    box-shadow: 0 0 20px rgba(111, 66, 193, 0.4);
+}
+
+/* ------------------------------------
+   12. TEXT ANIMATIONS
+   ------------------------------------ */
+
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-shimmer {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+}

@@ -19,6 +19,13 @@ namespace Afamia_UI.Pages.Admins
         public void OnGet()
         {
             productionRooms = Pobj.GetAllProductionRooms();
+            Console.WriteLine(productionRooms[0].Place);
+        }
+
+        public IActionResult OnPostDelete(int id)
+        {
+            Pobj.Delete(id);
+            return RedirectToPage();
         }
     }
 }

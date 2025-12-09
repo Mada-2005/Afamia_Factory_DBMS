@@ -1,0 +1,403 @@
+@page
+@model Afamia_UI.Pages.Admins.IndexModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!--
+    ============================================
+    STYLE SECTION - Page-Specific CSS
+    ============================================
+    All styles here ONLY affect THIS page
+    Global styles are in wwwroot/css/animations.css and components.css
+-->
+<style>
+    /* ====================================
+       HEADER STYLES
+       ==================================== */
+
+    /* Container for page header (title + subtitle) */
+    .dashboard-header {
+        margin-bottom: 40px;                    /* Space below header */
+        animation: fadeInDown 0.8s ease-out;    /* Fade in from top on page load */
+    }
+
+    /* Main page title with gradient text */
+    .dashboard-title {
+        font-size: 36px;                        /* Large text size */
+        font-weight: 700;                       /* Bold text (700 = bold) */
+
+        /* Create purple gradient */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        /* Make gradient apply to text only (not whole element) */
+        -webkit-background-clip: text;          /* For Safari/Chrome */
+        -webkit-text-fill-color: transparent;   /* Make text transparent so gradient shows */
+        background-clip: text;                  /* Standard property */
+
+        margin-bottom: 8px;                     /* Small space below title */
+    }
+
+    /* Subtitle text below main title */
+    .dashboard-subtitle {
+        color: #7f8c8d;                        /* Gray color */
+        font-size: 16px;                       /* Medium text size */
+    }
+
+    /* ====================================
+       STAT CARD STYLES
+       ==================================== */
+
+    /* Main card container - clickable box with stats */
+    .stat-card {
+        background: white;                      /* White background */
+        border-radius: 20px;                    /* Very rounded corners */
+        padding: 30px;                          /* Space inside card */
+        text-decoration: none;                  /* Remove underline from link */
+        display: block;                         /* Make link fill whole area */
+        position: relative;                     /* For positioning ::before and ::after */
+        overflow: hidden;                       /* Hide content outside card */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);  /* Soft shadow for depth */
+
+        /* Smooth animation for ALL properties when changed */
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        border: 2px solid transparent;          /* Invisible border (for hover effect) */
+        height: 100%;                           /* Fill parent height */
+    }
+
+    /* Colored bar at top of card (using ::before pseudo-element) */
+    .stat-card::before {
+        content: '';                            /* Required for ::before to show */
+        position: absolute;                     /* Position relative to card */
+        top: 0;                                 /* Stick to top */
+        left: 0;                                /* Stick to left */
+        right: 0;                               /* Stick to right */
+        height: 4px;                           /* Thin line */
+        transition: all 0.4s ease;             /* Smooth height change on hover */
+    }
+
+    /* Purple gradient for employee card's top bar */
+    .stat-card.employee-card::before {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* Pink gradient for room card's top bar */
+    .stat-card.room-card::before {
+        background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    /* Overlay for hover effect (using ::after pseudo-element) */
+    .stat-card::after {
+        content: '';                            /* Required for ::after to show */
+        position: absolute;                     /* Position relative to card */
+        top: 0; left: 0; right: 0; bottom: 0;  /* Cover entire card */
+        opacity: 0;                            /* Start invisible */
+        transition: opacity 0.4s ease;         /* Smooth fade in/out */
+        pointer-events: none;                   /* Don't block clicks */
+    }
+
+    /* Purple tint overlay for employee card (invisible by default) */
+    .stat-card.employee-card::after {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    }
+
+    /* Pink tint overlay for room card (invisible by default) */
+    .stat-card.room-card::after {
+        background: linear-gradient(135deg, rgba(240, 147, 251, 0.05) 0%, rgba(245, 87, 108, 0.05) 100%);
+    }
+
+    /* What happens when you HOVER over the card */
+    .stat-card:hover {
+        transform: translateY(-12px) scale(1.02);  /* Move up 12px and grow 2% */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);  /* Bigger, darker shadow */
+    }
+
+    /* Make top bar taller on hover */
+    .stat-card:hover::before {
+        height: 6px;                           /* Grow from 4px to 6px */
+    }
+
+    /* Show the colored overlay on hover */
+    .stat-card:hover::after {
+        opacity: 1;                            /* Fade from invisible to visible */
+    }
+
+    /* ====================================
+       STAT ICON STYLES
+       ==================================== */
+
+    /* Icon container at top of card */
+    .stat-icon {
+        width: 70px;                           /* Square icon */
+        height: 70px;
+        border-radius: 18px;                   /* Rounded corners */
+        display: flex;                         /* Use flexbox for centering */
+        align-items: center;                   /* Center vertically */
+        justify-content: center;               /* Center horizontally */
+        margin-bottom: 20px;                   /* Space below icon */
+        position: relative;                    /* For animations */
+        transition: all 0.4s ease;            /* Smooth animations */
+    }
+
+    /* Purple gradient background for employee icon */
+    .employee-card .stat-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);  /* Purple glow */
+    }
+
+    /* Pink gradient background for room icon */
+    .room-card .stat-icon {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);  /* Pink glow */
+    }
+
+    /* Icon animation on card hover */
+    .stat-card:hover .stat-icon {
+        transform: scale(1.1) rotate(5deg);    /* Grow 10% and tilt 5 degrees */
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);  /* Bigger glow */
+    }
+
+    /* ====================================
+       TEXT STYLES INSIDE CARD
+       ==================================== */
+
+    /* Small label text above title (e.g., "TOTAL ACTIVE") */
+    .stat-label {
+        font-size: 14px;                       /* Small text */
+        font-weight: 600;                      /* Semi-bold */
+        text-transform: uppercase;             /* MAKE TEXT UPPERCASE */
+        letter-spacing: 0.5px;                /* Space between letters */
+        color: #95a5a6;                       /* Light gray */
+        margin-bottom: 8px;                    /* Small space below */
+    }
+
+    /* Card title (e.g., "Employees") */
+    .stat-title {
+        font-size: 20px;                       /* Medium-large text */
+        font-weight: 700;                      /* Bold */
+        color: #2c3e50;                       /* Dark gray */
+        margin-bottom: 15px;                   /* Space below */
+    }
+
+    /* Large number showing the stat (e.g., "123") */
+    .stat-value {
+        font-size: 48px;                       /* VERY large text */
+        font-weight: 800;                      /* Extra bold */
+        margin-bottom: 12px;                   /* Space below */
+        display: block;                        /* Take full width */
+    }
+
+    /* Purple gradient text for employee card value */
+    .employee-card .stat-value {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Pink gradient text for room card value */
+    .room-card .stat-value {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Description text at bottom of card */
+    .stat-description {
+        color: #7f8c8d;                       /* Gray color */
+        font-size: 14px;                       /* Small text */
+        margin: 0;                             /* No extra space */
+        display: flex;                         /* Use flexbox */
+        align-items: center;                   /* Align items vertically */
+        gap: 8px;                             /* Space between text and arrow */
+    }
+
+    /* Arrow icon that moves on hover */
+    .stat-arrow {
+        transition: transform 0.3s ease;       /* Smooth movement */
+    }
+
+    /* Move arrow right when hovering card */
+    .stat-card:hover .stat-arrow {
+        transform: translateX(5px);           /* Move 5px to the right */
+    }
+
+    /* ====================================
+       ANIMATIONS
+       ==================================== */
+
+    /* Fade in from top animation */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;                        /* Start invisible */
+            transform: translateY(-20px);      /* Start 20px above */
+        }
+        to {
+            opacity: 1;                        /* End visible */
+            transform: translateY(0);          /* End at normal position */
+        }
+    }
+
+    /* Class to trigger fade in from bottom */
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Fade in from bottom animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;                        /* Start invisible */
+            transform: translateY(30px);       /* Start 30px below */
+        }
+        to {
+            opacity: 1;                        /* End visible */
+            transform: translateY(0);          /* End at normal position */
+        }
+    }
+</style>
+
+<!--
+    ============================================
+    HTML CONTENT SECTION
+    ============================================
+    This is the actual page content that users see
+-->
+
+<!-- Main container - centers content and adds padding -->
+<div class="container py-5">
+
+    <!-- PAGE HEADER - Title and subtitle -->
+    <div class="dashboard-header">
+        <!-- Main title with gradient effect -->
+        <h1 class="dashboard-title">Admin Dashboard</h1>
+        <!-- Subtitle describing the page -->
+        <p class="dashboard-subtitle">Welcome back! Here's what's happening with your factory today.</p>
+    </div>
+
+    <!-- CARDS ROW - Uses Bootstrap grid system -->
+    <div class="row g-4">
+        <!-- g-4 = gap of 4 (space between cards) -->
+
+        <!-- EMPLOYEE CARD -->
+        <!-- col-12 = full width on mobile -->
+        <!-- col-md-6 = half width on tablet -->
+        <!-- col-lg-6 = half width on desktop -->
+        <div class="col-12 col-md-6 col-lg-6 fade-in-up" style="animation-delay: 0.1s;">
+            <!-- Delay animation by 0.1s for stagger effect -->
+
+            <!-- Clickable card that links to Employees page -->
+            <!-- NOTE: asp-page creates link to specified Razor Page -->
+            <a asp-page="/Admins/Employees(operations)/Employees" class="stat-card employee-card">
+
+                <!-- Icon container with gradient background -->
+                <div class="stat-icon">
+                    <!-- SVG icon of a person -->
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                        <!-- Circle for head -->
+                        <circle cx="12" cy="8" r="3.5" stroke="white" stroke-width="2" fill="none"/>
+                        <!-- Path for body -->
+                        <path d="M4 20c0-3.5 3-6.5 8-6.5s8 3 8 6.5" stroke="white" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+
+                <!-- Small label text -->
+                <div class="stat-label">Total Active</div>
+
+                <!-- Card title -->
+                <h3 class="stat-title">Employees</h3>
+
+                <!-- Large number from C# model -->
+                <!-- @Model accesses data from backend -->
+                <span class="stat-value">@Model.TotalActiveEmployees</span>
+
+                <!-- Description with arrow -->
+                <p class="stat-description">
+                    <span>Manage employee records and operations</span>
+                    <!-- Arrow SVG that slides right on hover -->
+                    <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </p>
+            </a>
+        </div>
+
+        <!-- PRODUCTION ROOMS CARD -->
+        <!-- Same structure as employee card, but with different:
+             - Link (asp-page)
+             - Classes (room-card)
+             - Icon
+             - Data (@Model.TotalProductionRooms)
+             - Animation delay (0.2s for stagger effect)
+        -->
+        <div class="col-12 col-md-6 col-lg-6 fade-in-up" style="animation-delay: 0.2s;">
+            <a asp-page="/Admins/ProductionRooms(operations)/ProductionRooms" class="stat-card room-card">
+                <div class="stat-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="7" width="18" height="12" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                        <rect x="6" y="4" width="12" height="5" rx="1" stroke="white" stroke-width="2" fill="none"/>
+                        <circle cx="9" cy="14" r="1.5" fill="white"/>
+                        <circle cx="15" cy="14" r="1.5" fill="white"/>
+                    </svg>
+                </div>
+
+                <div class="stat-label">Active Facilities</div>
+                <h3 class="stat-title">Production Rooms</h3>
+
+                <span class="stat-value">@Model.TotalProductionRooms</span>
+
+                <p class="stat-description">
+                    <span>View and manage production facilities</span>
+                    <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--
+    ============================================
+    SUMMARY OF WHAT HAPPENS
+    ============================================
+
+    1. PAGE LOADS:
+       - Dashboard header fades in from top (fadeInDown)
+       - Cards appear one after another (fade-in-up with stagger delays)
+
+    2. USER HOVERS OVER CARD:
+       - Card lifts up 12px and grows 2%
+       - Shadow gets bigger and darker
+       - Top colored bar grows from 4px to 6px
+       - Colored overlay fades in
+       - Icon grows 10% and tilts 5 degrees
+       - Arrow slides 5px to the right
+
+    3. USER CLICKS CARD:
+       - Navigates to linked page (Employees or Production Rooms)
+
+    ============================================
+    KEY CONCEPTS USED
+    ============================================
+
+    CSS:
+    - Gradients (linear-gradient)
+    - Transforms (translateY, scale, rotate)
+    - Transitions (smooth property changes)
+    - Animations (@keyframes)
+    - Pseudo-elements (::before, ::after)
+    - Flexbox (display: flex)
+    - Box shadows
+    - Hover states (:hover)
+
+    HTML:
+    - Bootstrap grid (container, row, col-*)
+    - SVG icons
+    - Razor syntax (@Model, asp-page)
+    - Inline styles (style="...")
+    - CSS classes (class="...")
+
+    ============================================
+-->

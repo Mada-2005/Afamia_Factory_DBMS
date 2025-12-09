@@ -1,0 +1,357 @@
+﻿@page
+@model Afamia_UI.Pages.Admins.AddEmployeeModel
+@{
+    ViewData["Title"] = "Add New Employee";
+}
+
+<style>
+    /* ==================== FORM CONTAINER (Max Width Wrapper) ==================== */
+    .form-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ==================== FORM HEADER (Title + Subtitle) ==================== */
+    .form-header {
+        margin-bottom: 40px;
+        animation: fadeInDown 0.6s ease-out;
+        text-align: center;
+    }
+
+    .form-title {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+    }
+
+    .form-subtitle {
+        color: #7f8c8d;
+        font-size: 15px;
+    }
+
+    /* ==================== MAIN FORM CARD ==================== */
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Top gradient bar on form card */
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* ==================== SECTION TITLES (With Icon + Line) ==================== */
+    .form-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .form-section-title svg {
+        flex-shrink: 0;
+    }
+
+    /* Gradient line after section title */
+    .form-section-title::after {
+        content: '';
+        flex-grow: 1;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, transparent 100%);
+    }
+
+    /* ==================== FORM INPUT FIELDS ==================== */
+    .form-group-enhanced {
+        margin-bottom: 25px;
+    }
+
+    .label-enhanced {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
+        font-size: 14px;
+        display: block;
+    }
+
+    /* Modern input field styling */
+    .input-enhanced {
+        border: 2px solid #e8e8e8;
+        border-radius: 14px;
+        padding: 14px 18px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: #fafafa;
+        width: 100%;
+    }
+
+    /* Input focus effect (lifts up, changes color) */
+    .input-enhanced:focus {
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        outline: none;
+        transform: translateY(-2px);
+    }
+
+    /* ==================== PHONE NUMBER MANAGEMENT ==================== */
+    .phone-input-group {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .phone-input-group input {
+        flex: 1;
+    }
+
+    .phone-controls {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    /* Add Phone button (green) */
+    .btn-add-phone {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-add-phone:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(17, 153, 142, 0.3);
+    }
+
+    /* Remove Phone button (red) */
+    .btn-remove-phone {
+        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-remove-phone:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(235, 51, 73, 0.3);
+    }
+
+    /* ==================== FORM ACTIONS (Cancel/Save Buttons) ==================== */
+    .form-actions {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid #f0f0f0;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+    }
+
+    /* Save button (purple gradient) */
+    .btn-save {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 14px 40px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Cancel button (outline style) */
+    .btn-cancel {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        border-radius: 14px;
+        padding: 14px 40px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel:hover {
+        background: #667eea;
+        color: white;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .phone-list-item {
+        animation: slideInLeft 0.4s ease-out;
+    }
+
+    @@keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<!-- ==================== MAIN FORM CONTAINER ==================== -->
+<div class="container py-5 form-container">
+    <!-- ==================== FORM HEADER ==================== -->
+    <div class="form-header">
+        <h1 class="form-title">Add New Employee</h1>
+        <p class="form-subtitle">Fill in the employee information below</p>
+    </div>
+
+    <!-- ==================== FORM CARD ==================== -->
+    <div class="form-card">
+        <form method="post" asp-page-handler="Submit">
+
+            <!-- ==================== BASIC INFORMATION SECTION ==================== -->
+            <div class="form-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="3.5" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <path d="M4 20c0-3.5 3-6.5 8-6.5s8 3 8 6.5" stroke="#667eea" stroke-width="2" fill="none"/>
+                </svg>
+                Basic Information
+            </div>
+
+            <!-- Employee ID + Role Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="employee.Id" class="label-enhanced">Employee ID</label>
+                    <input type="text" class="input-enhanced" asp-for="employee.Id" placeholder="Enter employee ID">
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="employee.role" class="label-enhanced">Role</label>
+                    <input type="text" class="input-enhanced" asp-for="employee.role" placeholder="Enter role (e.g., Manager, Worker)">
+                </div>
+            </div>
+
+            <!-- First Name + Last Name Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="employee.FName" class="label-enhanced">First Name</label>
+                    <input type="text" class="input-enhanced" asp-for="employee.FName" placeholder="Enter first name">
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="employee.LName" class="label-enhanced">Last Name</label>
+                    <input type="text" class="input-enhanced" asp-for="employee.LName" placeholder="Enter last name">
+                </div>
+            </div>
+
+            <!-- Works in Factory Dropdown -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="employee.Works_in_Factory" class="label-enhanced">Works in Factory</label>
+                    <select class="input-enhanced" asp-for="employee.Works_in_Factory">
+                        <option value="">Select...</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ==================== CONTACT INFORMATION SECTION ==================== -->
+            <div class="form-section-title" style="margin-top: 40px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="2" width="14" height="20" rx="2" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <path d="M9 18h6" stroke="#667eea" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Contact Information
+            </div>
+
+            <!-- Phone Numbers List -->
+            <div class="row">
+                @for (int i = 0; i < Model.employee.Phone.Count; i++)
+                {
+                    <div class="col-md-6 form-group-enhanced phone-list-item">
+                        <label asp-for="employee.Phone[i]" class="label-enhanced">Phone Number @(i + 1)</label>
+                        <div class="phone-input-group">
+                            <input type="text" class="input-enhanced" asp-for="employee.Phone[i]" placeholder="Enter phone number">
+                            <!-- Remove Phone Button -->
+                            <button type="submit" asp-page-handler="RemovePhone" asp-route-index="@i" class="btn-remove-phone">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; vertical-align: middle;">
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Add Phone Button -->
+            <div class="phone-controls">
+                <button type="submit" asp-page-handler="AddPhone" class="btn-add-phone">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Add Phone Number
+                </button>
+            </div>
+
+            <!-- ==================== FORM ACTIONS (Cancel/Save) ==================== -->
+            <div class="form-actions">
+                <a asp-page="/Admins/Employees(operations)/Employees" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-save btn-animated">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Save Employee
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

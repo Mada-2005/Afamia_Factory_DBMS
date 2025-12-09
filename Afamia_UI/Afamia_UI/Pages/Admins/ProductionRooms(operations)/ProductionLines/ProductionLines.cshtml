@@ -1,0 +1,295 @@
+@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations.ProductionLines.ProductionLinesModel
+@{
+    ViewData["Title"] = "Production Lines Management";
+}
+
+<style>
+    /* ==================== BREADCRUMB NAVIGATION ==================== */
+    .breadcrumb-modern {
+        background: none;
+        padding: 0;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .breadcrumb-modern a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-modern a:hover {
+        color: #764ba2;
+    }
+
+    /* ==================== PAGE HEADER (Title + Badge) ==================== */
+    .page-header {
+        margin-bottom: 35px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+    }
+
+    /* Room ID badge next to title */
+    .room-badge {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        margin-left: 12px;
+    }
+
+    /* ==================== ACTION BAR (Add Button) ==================== */
+    .action-bar {
+        margin-bottom: 30px;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    /* ==================== TABLE CONTAINER ==================== */
+    .table-container {
+        background: white;
+        border-radius: 20px;
+        padding: 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ==================== TABLE STYLING (Cyan/Blue Theme) ==================== */
+    .lines-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    /* Table header with cyan gradient */
+    .lines-table thead {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .lines-table thead th {
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        padding: 20px 18px;
+        border: none;
+        text-align: left;
+    }
+
+    .lines-table thead th:first-child {
+        border-top-left-radius: 20px;
+    }
+
+    .lines-table thead th:last-child {
+        border-top-right-radius: 20px;
+    }
+
+    /* ==================== TABLE ROW HOVER EFFECTS (Clickable Rows) ==================== */
+    .lines-table tbody tr {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-bottom: 1px solid #f0f0f0;
+        background: white;
+        cursor: pointer;
+    }
+
+    .lines-table tbody tr:hover {
+        background: linear-gradient(90deg, rgba(79, 172, 254, 0.08) 0%, rgba(0, 242, 254, 0.08) 100%);
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .lines-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    /* ==================== TABLE CELL STYLING ==================== */
+    .lines-table tbody td {
+        padding: 18px;
+        color: #2c3e50;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    /* ==================== LINE LINK (Links to Pipeline Sections) ==================== */
+    .line-link {
+        color: #2c3e50;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .line-link:hover {
+        color: #4facfe;
+        gap: 12px;
+    }
+
+    /* Arrow animation on hover */
+    .line-link svg {
+        transition: transform 0.3s ease;
+    }
+
+    .line-link:hover svg {
+        transform: translateX(3px);
+    }
+
+    /* ==================== ACTION BUTTONS (Edit/Delete) ==================== */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    /* Cyan button style */
+    .btn-modern-cyan {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
+
+    .btn-modern-cyan:hover {
+        background: linear-gradient(135deg, #3f9cee 0%, #00e2ee 100%);
+        color: white;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<!-- ==================== MAIN CONTAINER ==================== -->
+<div class="container py-4">
+    <!-- ==================== BREADCRUMB NAVIGATION ==================== -->
+    <nav class="breadcrumb-modern">
+        <a asp-page="/Admins/Index">Dashboard</a>
+        <span style="color: #ccc;">/</span>
+        <a asp-page="/Admins/ProductionRooms(operations)/ProductionRooms">Production Rooms</a>
+        <span style="color: #ccc;">/</span>
+        <span style="color: #555;">Production Lines</span>
+    </nav>
+
+    <!-- ==================== PAGE HEADER (Title + Room Badge) ==================== -->
+    <div class="page-header">
+        <h1 class="page-title">
+            Production Lines
+            <span class="room-badge">Room #@Model.RoomId</span>
+        </h1>
+        <p style="color: #7f8c8d; font-size: 15px;">Manage production lines and their sections</p>
+    </div>
+
+    <!-- ==================== ACTION BAR (Add Button) ==================== -->
+    <div class="action-bar" style="display: flex; gap: 15px;">
+        <a class="btn btn-modern btn-modern-cyan" asp-page="/Admins/ProductionRooms(Operations)/ProductionLines/AddProductionLine" asp-route-roomId="@Model.RoomId">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add New Production Line
+        </a>
+    </div>
+
+    <!-- ==================== PRODUCTION LINES TABLE ==================== -->
+    <div class="table-container">
+        <table class="lines-table table-modern">
+            <!-- Table Header -->
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Line Name</th>
+                    <th>Room ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <!-- Table Body (Line Data - Clickable Rows) -->
+            <tbody>
+                @foreach (var line in Model.productionLines)
+                {
+                    <tr>
+                        <td>
+                            <!-- Link to Pipeline Sections -->
+                            <a asp-page="/Admins/ProductionRooms(operations)/ProductionLines/PipelineSections/PipelineSections" asp-route-pipelineId="@line.Id" class="line-link">
+                                <strong>#@line.Id</strong>
+                            </a>
+                        </td>
+                        <td>
+                            <!-- Link to Pipeline Sections with Icon -->
+                            <a asp-page="/Admins/ProductionRooms(operations)/ProductionLines/PipelineSections/PipelineSections" asp-route-pipelineId="@line.Id" class="line-link">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                @line.Name
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </a>
+                        </td>
+                        <td>
+                            <!-- Room ID Display -->
+                            <span style="color: #4facfe; font-weight: 600;">Room #@line.Room_ID</span>
+                        </td>
+                        <td>
+                            <!-- Action Buttons (Schedule/Edit/Delete) -->
+                            <div class="action-buttons">
+                                <a class="btn btn-modern-purple btn-sm" asp-page="/Admins/DailyWorkSchedule(operations)/DailyWorkSchedule" asp-route-pipelineId="@line.Id" style="padding: 8px 16px; font-size: 13px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 4px; vertical-align: middle;">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 2v4M16 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Schedule
+                                </a>
+                                <a class="btn btn-modern-info btn-sm" asp-page="/Admins/ProductionRooms(operations)/ProductionLines/Edit" asp-route-id="@line.Id" style="padding: 8px 16px; font-size: 13px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 4px; vertical-align: middle;">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Edit
+                                </a>
+                                <form method="post" asp-page-handler="Delete" style="display: inline;">
+                                    <input type="hidden" name="id" value="@line.Id" />
+                                    <button type="submit" class="btn btn-modern-danger btn-sm" onclick="return confirm('Are you sure you want to delete this production line?');" style="padding: 8px 16px; font-size: 13px;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 4px; vertical-align: middle;">
+                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

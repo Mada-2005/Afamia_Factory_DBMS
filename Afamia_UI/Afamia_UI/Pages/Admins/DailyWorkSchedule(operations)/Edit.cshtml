@@ -1,0 +1,305 @@
+@page
+@model Afamia_UI.Pages.Admins.DailyWorkSchedule_operations.EditModel
+@{
+    ViewData["Title"] = "Edit Work Schedule";
+}
+
+<style>
+    /* ==================== BREADCRUMB NAVIGATION ==================== */
+    .breadcrumb-modern {
+        background: none;
+        padding: 0;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .breadcrumb-modern a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-modern a:hover {
+        color: #764ba2;
+    }
+
+    /* ==================== PAGE HEADER ==================== */
+    .page-header {
+        margin-bottom: 35px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+    }
+
+    /* ==================== FORM CONTAINER ==================== */
+    .form-container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        max-width: 700px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ==================== INFO BOX ==================== */
+    .info-box {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        border-left: 4px solid #667eea;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .info-box strong {
+        color: #667eea;
+    }
+
+    /* ==================== FORM GROUP STYLING ==================== */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #667eea;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group input:disabled,
+    .form-group select:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+    }
+
+    /* ==================== ERROR MESSAGE ==================== */
+    .error-message {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    /* ==================== BUTTON STYLING ==================== */
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-modern-purple {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modern-purple:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+        background: #e0e0e0;
+        color: #2c3e50;
+        padding: 12px 30px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background: #d0d0d0;
+        color: #2c3e50;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+</style>
+
+<!-- ==================== MAIN CONTAINER ==================== -->
+<div class="container py-4">
+    <!-- ==================== BREADCRUMB NAVIGATION ==================== -->
+    <nav class="breadcrumb-modern">
+        <a asp-page="/Admins/Index">Dashboard</a>
+        <span style="color: #ccc;">/</span>
+        <a asp-page="/Admins/ProductionRooms(operations)/ProductionRooms">Production Rooms</a>
+        <span style="color: #ccc;">/</span>
+        <a asp-page="/Admins/ProductionRooms(operations)/ProductionLines/ProductionLines" asp-route-roomId="@Model.RoomId">Production Lines</a>
+        <span style="color: #ccc;">/</span>
+        <a asp-page="/Admins/DailyWorkSchedule(operations)/DailyWorkSchedule" asp-route-pipelineId="@Model.schedule.Pipeline_ID" asp-route-workDate="@Model.schedule.Work_Date.ToString("yyyy-MM-dd")">Daily Work Schedule</a>
+        <span style="color: #ccc;">/</span>
+        <span style="color: #555;">Edit Assignment</span>
+    </nav>
+
+    <!-- ==================== PAGE HEADER ==================== -->
+    <div class="page-header">
+        <h1 class="page-title">Edit Work Schedule Assignment</h1>
+        <p style="color: #7f8c8d; font-size: 15px;">Update employee assignment details for @Model.schedule.Work_Date.ToString("MMMM dd, yyyy")</p>
+    </div>
+
+    <!-- ==================== FORM CONTAINER ==================== -->
+    <div class="form-container">
+        <!-- Info Box -->
+        <div class="info-box">
+            <strong>Current Assignment:</strong> @Model.schedule.EmployeeName is assigned to @Model.schedule.SectionName
+        </div>
+
+        <!-- Error Message -->
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="error-message">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                @Model.ErrorMessage
+            </div>
+        }
+
+        <!-- Form -->
+        <form method="post">
+            <input type="hidden" asp-for="schedule.Schedule_ID" />
+            <input type="hidden" asp-for="schedule.Pipeline_ID" />
+            <input type="hidden" asp-for="schedule.Work_Date" />
+
+            <!-- Employee Selection -->
+            <div class="form-group">
+                <label for="EmployeeID">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Select Employee
+                </label>
+                <select id="EmployeeID" asp-for="schedule.EmployeeID" required>
+                    <option value="">-- Select an employee --</option>
+                    @foreach (var emp in Model.employees)
+                    {
+                        <option value="@emp.Id">@emp.FName @emp.LName (ID: @emp.Id - @emp.role)</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Section Selection -->
+            <div class="form-group">
+                <label for="SectionID">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
+                        <rect x="3" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Select Section
+                </label>
+                <select id="SectionID" asp-for="schedule.SectionID" required>
+                    <option value="">-- Select a section --</option>
+                    @foreach (var sec in Model.sections)
+                    {
+                        <option value="@sec.ID">@sec.Name (ID: @sec.ID)</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Start Time -->
+            <div class="form-group">
+                <label for="Start_Time">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Start Time
+                </label>
+                <input type="time" id="Start_Time" asp-for="schedule.Start_Time" required />
+            </div>
+
+            <!-- End Time -->
+            <div class="form-group">
+                <label for="End_Time">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    End Time
+                </label>
+                <input type="time" id="End_Time" asp-for="schedule.End_Time" />
+                <small style="color: #95a5a6; font-size: 12px; margin-top: 5px; display: block;">Leave empty if the employee is still working in this section</small>
+            </div>
+
+            <!-- Button Group -->
+            <div class="btn-group">
+                <button type="submit" class="btn-modern-purple">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Update Assignment
+                </button>
+                <a asp-page="/Admins/DailyWorkSchedule(operations)/DailyWorkSchedule" asp-route-pipelineId="@Model.schedule.Pipeline_ID" asp-route-workDate="@Model.schedule.Work_Date.ToString("yyyy-MM-dd")" class="btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
