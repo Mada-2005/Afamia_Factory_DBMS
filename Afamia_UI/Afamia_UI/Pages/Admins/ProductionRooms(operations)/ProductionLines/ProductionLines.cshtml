@@ -5,6 +5,9 @@
 }
 
 <style>
+
+    
+
     /* ==================== BREADCRUMB NAVIGATION ==================== */
     .breadcrumb-modern {
         background: none;
@@ -44,17 +47,22 @@
     }
 
     /* Room ID badge next to title */
+    /* Room ID badge next to title */
+    /* Room ID badge next to title */
     .room-badge {
         display: inline-block;
         padding: 8px 18px;
         border-radius: 20px;
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         font-weight: 600;
         font-size: 14px;
         margin-left: 12px;
+        /* FIX: Override the parent's transparent text */
+        -webkit-text-fill-color: white !important;
+        background-clip: border-box !important;
+        -webkit-background-clip: border-box !important;
     }
-
     /* ==================== ACTION BAR (Add Button) ==================== */
     .action-bar {
         margin-bottom: 30px;
@@ -204,9 +212,11 @@
     <div class="page-header">
         <h1 class="page-title">
             Production Lines
-            <span class="room-badge">Room #@Model.RoomId</span>
+            <span class="room-badge">
+                Room #@Model.RoomId
+            </span>
         </h1>
-        <p style="color: #7f8c8d; font-size: 15px;">Manage production lines and their sections</p>
+        <p style="color: black; font-size: 15px;">Manage production lines and their sections</p>
     </div>
 
     <!-- ==================== ACTION BAR (Add Button) ==================== -->

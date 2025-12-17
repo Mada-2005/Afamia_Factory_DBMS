@@ -135,6 +135,19 @@
         flex-wrap: wrap;
     }
 
+    .employee-name-link {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .employee-name-link:hover {
+        color: #004499;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
     /* ==================== ANIMATIONS ==================== */
     @@keyframes fadeInDown {
         from { opacity: 0; transform: translateY(-20px); }
@@ -199,27 +212,43 @@
                 </tr>
             </thead>
             <!-- Table Body (Employee Data) -->
+            <!-- Table Body (Employee Data) -->
             <tbody>
                 @foreach (var employee in Model.employees)
                 {
                     <tr>
+                        <!-- ID Column -->
                         <td><strong>#@employee.Id</strong></td>
-                        <td>@employee.FName</td>
+
+                        <!-- FIRST NAME Column (with clickable link) -->
+                        <td>
+                            <a asp-page="/Admins/DailyWorkSchedule(operations)/EmployeeSchedule"
+                               asp-route-id="@employee.Id"
+                               class="employee-name-link">
+                                @employee.FName
+                            </a>
+                        </td>
+
+                        <!-- LAST NAME Column -->
                         <td>@employee.LName</td>
+
+                        <!-- ROLE Column -->
                         <td>
                             <span style="color: #667eea; font-weight: 600;">@employee.role</span>
                         </td>
+
+                        <!-- WORKS IN FACTORY Column -->
                         <td>
-                            <!-- Status Badge (Yes/No) -->
                             <span class="badge-factory @(employee.Works_in_Factory ? "badge-yes" : "badge-no")">
                                 @(employee.Works_in_Factory ? "Yes" : "No")
                             </span>
                         </td>
+
+                        <!-- PHONE NUMBERS Column -->
                         <td>
-                            <!-- Phone Numbers List -->
                             @if (employee.Phone != null && employee.Phone.Any())
                             {
-                                <ul>
+                                <ul style="margin: 0; padding-left: 20px;">
                                     @foreach (var phone in employee.Phone)
                                     {
                                         <li>@phone</li>
@@ -231,21 +260,28 @@
                                 <span style="color: #95a5a6; font-style: italic;">No phone numbers</span>
                             }
                         </td>
+
+                        <!-- ACTIONS Column -->
                         <td>
-                            <!-- Action Buttons (Edit/Delete) -->
                             <div class="action-buttons">
-                                <a class="btn btn-modern-info btn-sm" asp-page="/Admins/Employees(operations)/Edit" asp-route-id="@employee.Id" style="padding: 8px 16px; font-size: 13px;">
+                                <a class="btn btn-modern-info btn-sm"
+                                   asp-page="/Admins/Employees(operations)/Edit"
+                                   asp-route-id="@employee.Id"
+                                   style="padding: 8px 16px; font-size: 13px;">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 4px; vertical-align: middle;">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" />
                                     </svg>
                                     Edit
                                 </a>
                                 <form method="post" asp-page-handler="Delete" style="display: inline;">
                                     <input type="hidden" name="id" value="@employee.Id" />
-                                    <button type="submit" class="btn btn-modern-danger btn-sm" onclick="return confirm('Are you sure you want to delete this employee?');" style="padding: 8px 16px; font-size: 13px;">
+                                    <button type="submit"
+                                            class="btn btn-modern-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this employee?');"
+                                            style="padding: 8px 16px; font-size: 13px;">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 4px; vertical-align: middle;">
-                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" />
                                         </svg>
                                         Delete
                                     </button>

@@ -1,5 +1,7 @@
 ﻿using Afamia_UI.Models.Entities;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Reflection.PortableExecutable;
 
 namespace Afamia_UI.Models.Queries
 {
@@ -287,6 +289,46 @@ namespace Afamia_UI.Models.Queries
             }
 
             return sections;
+        }
+
+        public List<DailyWorkSchedule> GetEmployeeSchedule(int empId)
+        {
+            List<DailyWorkSchedule> EmpSchedules = new List<DailyWorkSchedule>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
+                {
+                    con.Open();
+                    string sql = "SELECT ID, (FName +' '+ LName) as EmployeeName, DS.Schedule_ID,DS.Work_Date, DS.Start_Time, DS.End_Time, P.PipelineName, P.SectionName\r\nFROM Employee\r\nLEFT JOIN (\r\n    SELECT * FROM Daily_Work_Schedule\r\n    \r\n) AS DS  -- <--- This ALIAS is required\r\nON Employee.ID = DS.EmployeeID\r\n\r\n\r\n\r\nRight Join(\r\n Select Production_Pipeline.ID AS Pipe_ID, \r\n        Production_Pipeline.Name AS PipelineName,\r\n        Pipeline_Section.ID AS Sect_ID,\r\n        Pipeline_Section.Name AS SectionName,\r\n        Pipeline_Section.Pipeline_ID AS F1\r\n\r\n    FROM Production_Pipeline, Pipeline_Section\r\n    where Pipeline_Section.Pipeline_ID = Production_Pipeline.ID\r\n\r\n    ) AS P\r\n    ON Pipeline_ID = P.Pipe_ID and SectionID = P.Sect_ID\r\n\r\n    where DS.Schedule_ID IS NOT NULL and Id = @id\r\n\r\n    ORDER BY DS.Work_Date DESC";
+                    SqlCommand cmd = new SqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("id", empId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        EmpSchedules.Add(new DailyWorkSchedule
+                        {
+                            EmployeeID = reader.GetInt32(0),        
+                            EmployeeName = reader.GetString(1),     
+                            Schedule_ID = reader.GetInt32(2),       
+                            Work_Date = reader.GetDateTime(3),      
+                            Start_Time = reader.IsDBNull(4) ? null : reader.GetTimeSpan(4),  
+                            End_Time = reader.IsDBNull(5) ? null : reader.GetTimeSpan(5),    
+                            PipelineName = reader.GetString(6),    
+                            SectionName = reader.GetString(7)       
+                        });
+                    }
+                }
+
+                return EmpSchedules;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
         }
     }
 }

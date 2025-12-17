@@ -6,6 +6,23 @@
 
 <style>
     /* ==================== BREADCRUMB NAVIGATION ==================== */
+   
+    #EmployeeID {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    #EmployeeID:focus {
+        border-color: #4facfe;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    }
+
+    
     .breadcrumb-modern {
         background: none;
         padding: 0;
@@ -201,21 +218,30 @@
             <input type="hidden" asp-for="schedule.Work_Date" />
 
             <!-- Employee Selection -->
+            <!-- Employee Selection -->
             <div class="form-group">
                 <label for="EmployeeID">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
                     </svg>
                     Select Employee
                 </label>
-                <select id="EmployeeID" asp-for="schedule.EmployeeID" required>
-                    <option value="">-- Select an employee --</option>
+
+                <input type="text"
+                       id="EmployeeID"
+                       name="schedule.EmployeeID"
+                       list="employeeList"
+                       placeholder="Start typing to search employees..."
+                       required
+                       style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;">
+
+                <datalist id="employeeList">
                     @foreach (var emp in Model.employees)
                     {
                         <option value="@emp.Id">@emp.FName @emp.LName (ID: @emp.Id - @emp.role)</option>
                     }
-                </select>
+                </datalist>
             </div>
 
             <!-- Section Selection -->
