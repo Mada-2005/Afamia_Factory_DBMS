@@ -1,0 +1,306 @@
+﻿@page
+@model Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines.AddProductModel
+@{
+    ViewData["Title"] = "Add New Product Batch";
+}
+
+<style>
+    /* ==================== FORM CONTAINER (Max Width Wrapper) ==================== */
+    .form-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ==================== FORM HEADER (Title + Subtitle) ==================== */
+    .form-header {
+        margin-bottom: 40px;
+        animation: fadeInDown 0.6s ease-out;
+        text-align: center;
+    }
+
+    .form-title {
+        font-size: 32px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+    }
+
+    .form-subtitle {
+        color: #7f8c8d;
+        font-size: 15px;
+    }
+
+    /* ==================== MAIN FORM CARD ==================== */
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Top gradient bar on form card */
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    /* ==================== SECTION TITLES (With Icon + Line) ==================== */
+    .form-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .form-section-title svg {
+        flex-shrink: 0;
+    }
+
+    /* Gradient line after section title */
+    .form-section-title::after {
+        content: '';
+        flex-grow: 1;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(17, 153, 142, 0.3) 0%, transparent 100%);
+    }
+
+    /* ==================== FORM INPUT FIELDS ==================== */
+    .form-group-enhanced {
+        margin-bottom: 25px;
+    }
+
+    .label-enhanced {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
+        font-size: 14px;
+        display: block;
+    }
+
+    /* Modern input field styling */
+    .input-enhanced {
+        border: 2px solid #e8e8e8;
+        border-radius: 14px;
+        padding: 14px 18px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: #fafafa;
+        width: 100%;
+    }
+
+    /* Input focus effect (lifts up, changes color) */
+    .input-enhanced:focus {
+        border-color: #11998e;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(17, 153, 142, 0.1);
+        outline: none;
+        transform: translateY(-2px);
+    }
+
+    /* ==================== FORM ACTIONS (Cancel/Save Buttons) ==================== */
+    .form-actions {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid #f0f0f0;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+    }
+
+    /* Save button (green gradient) */
+    .btn-save {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 14px 40px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(17, 153, 142, 0.3);
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+    }
+
+    /* Cancel button (outline style) */
+    .btn-cancel {
+        background: white;
+        color: #11998e;
+        border: 2px solid #11998e;
+        border-radius: 14px;
+        padding: 14px 40px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel:hover {
+        background: #11998e;
+        color: white;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<!-- ==================== MAIN FORM CONTAINER ==================== -->
+<div class="container py-5 form-container">
+    <!-- ==================== FORM HEADER ==================== -->
+    <div class="form-header">
+        <h1 class="form-title">Add New Product Batch</h1>
+        <p class="form-subtitle">Fill in the product information below. You can create multiple products at once.</p>
+    </div>
+
+    <!-- ==================== FORM CARD ==================== -->
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="product.Production_Line" />
+
+            <!-- ==================== BASIC INFORMATION SECTION ==================== -->
+            <div class="form-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#11998e" stroke-width="2" fill="none"/>
+                    <path d="M9 9h6M9 13h6M9 17h4" stroke="#11998e" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Basic Information
+            </div>
+
+            <!-- Product ID + Quantity Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.Id" class="label-enhanced">Starting Product ID</label>
+                    <input type="number" class="input-enhanced" asp-for="product.Id" placeholder="Enter starting ID (e.g., 1000)">
+                    <small class="text-muted">IDs will increment automatically for batch creation</small>
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.Quantity" class="label-enhanced">Batch Quantity</label>
+                    <input type="number" class="input-enhanced" asp-for="product.Quantity" placeholder="Enter quantity (max 1000)" value="1">
+                    <small class="text-muted">Number of products to create in this batch</small>
+                </div>
+            </div>
+
+            <!-- Product Name + Customer ID Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.Name" class="label-enhanced">Product Name</label>
+                    <input type="text" class="input-enhanced" asp-for="product.Name" placeholder="Enter product name (max 10 chars)">
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.Customer_Id" class="label-enhanced">Customer ID</label>
+                    <input type="number" class="input-enhanced" asp-for="product.Customer_Id" placeholder="Enter customer ID">
+                </div>
+            </div>
+
+            <!-- ==================== PRODUCT SPECIFICATIONS SECTION ==================== -->
+            <div class="form-section-title" style="margin-top: 40px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="#11998e" stroke-width="2" fill="none"/>
+                    <path d="M12 6v6l4 2" stroke="#11998e" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Product Specifications
+            </div>
+
+            <!-- Product Type Dropdown -->
+            <div class="row">
+                <div class="col-md-12 form-group-enhanced">
+                    <label asp-for="product.type" class="label-enhanced">Product Type</label>
+                    <select class="input-enhanced" asp-for="product.type">
+                        <option value="0">-- Select Product Type --</option>
+                        @foreach (var productType in Model.ProductTypes)
+                        {
+                            <option value="@productType.Id">@productType.Name (@productType.weight kg)</option>
+                        }
+                    </select>
+                    <small class="text-muted">Weight will be auto-assigned based on product type</small>
+                </div>
+            </div>
+
+            <!-- Start Time + End Time Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.Start_time" class="label-enhanced">Start Time (Optional)</label>
+                    <input type="time" class="input-enhanced" asp-for="product.Start_time" step="1">
+                    <small class="text-muted">Time when production started (HH:MM:SS)</small>
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.End_time" class="label-enhanced">End Time (Optional)</label>
+                    <input type="time" class="input-enhanced" asp-for="product.End_time" step="1">
+                    <small class="text-muted">Time when production ended (HH:MM:SS)</small>
+                </div>
+            </div>
+
+            <!-- ==================== DATE INFORMATION SECTION ==================== -->
+            <div class="form-section-title" style="margin-top: 40px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="#11998e" stroke-width="2" fill="none"/>
+                    <path d="M16 2v4M8 2v4M3 10h18" stroke="#11998e" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Date Information
+            </div>
+
+            <!-- Production Date + Expiration Date Row -->
+            <div class="row">
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.ProductionDate" class="label-enhanced">Production Date</label>
+                    <input type="datetime-local" class="input-enhanced" asp-for="product.ProductionDate">
+                </div>
+
+                <div class="col-md-6 form-group-enhanced">
+                    <label asp-for="product.ExpirationDate" class="label-enhanced">Expiration Date</label>
+                    <input type="date" class="input-enhanced" asp-for="product.ExpirationDate">
+                </div>
+            </div>
+
+            <!-- ==================== FORM ACTIONS (Cancel/Save) ==================== -->
+            <div class="form-actions">
+                <a asp-page="/Admins/ProductionRooms(operations)/ProductionLines/PipelineSections/PipelineSections" asp-route-pipelineId="@Model.PipelineId" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-save">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2"/>
+                        <polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Create Product Batch
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>

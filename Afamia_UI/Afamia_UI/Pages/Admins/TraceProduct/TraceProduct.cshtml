@@ -1,0 +1,378 @@
+@page
+@model Afamia_UI.Pages.Admins.TraceProduct.TraceProductModel
+@{
+    ViewData["Title"] = "Trace Product";
+}
+
+<style>
+    /* ==================== PAGE CONTAINER ==================== */
+    .trace-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ==================== PAGE HEADER ==================== */
+    .trace-header {
+        margin-bottom: 40px;
+        animation: fadeInDown 0.6s ease-out;
+        text-align: center;
+    }
+
+    .trace-title {
+        font-size: 36px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+    }
+
+    .trace-subtitle {
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+
+    /* ==================== SEARCH BOX ==================== */
+    .search-box {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .search-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .search-input-group {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        flex: 1;
+        border: 2px solid #e8e8e8;
+        border-radius: 14px;
+        padding: 16px 20px;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .search-input:focus {
+        border-color: #fa709a;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(250, 112, 154, 0.1);
+        outline: none;
+        transform: translateY(-2px);
+    }
+
+    .btn-search {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 16px 40px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
+    }
+
+    .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(250, 112, 154, 0.4);
+    }
+
+    /* ==================== PRODUCT INFO CARD ==================== */
+    .product-info-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        border-left: 5px solid #fa709a;
+    }
+
+    .product-info-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .product-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .info-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #95a5a6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    /* ==================== RESULTS TABLE ==================== */
+    .results-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .results-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .table-modern {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 20px;
+    }
+
+    .table-modern thead tr {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+    }
+
+    .table-modern th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table-modern th:first-child {
+        border-top-left-radius: 12px;
+    }
+
+    .table-modern th:last-child {
+        border-top-right-radius: 12px;
+    }
+
+    .table-modern tbody tr {
+        background: white;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .table-modern tbody tr:hover {
+        background: #fef9f5;
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .table-modern td {
+        padding: 15px;
+        color: #555;
+        font-size: 14px;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== BADGE STYLES ==================== */
+    .badge-role {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #95a5a6;
+    }
+
+    .no-results svg {
+        margin-bottom: 20px;
+    }
+</style>
+
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<!-- ==================== MAIN CONTAINER ==================== -->
+<div class="container py-5 trace-container">
+    <!-- ==================== PAGE HEADER ==================== -->
+    <div class="trace-header">
+        <h1 class="trace-title">Trace Product Batch</h1>
+        <p class="trace-subtitle">Enter a product ID to view production details and workers who handled this batch</p>
+    </div>
+
+    <!-- ==================== SEARCH BOX ==================== -->
+    <div class="search-box">
+        <form method="post" asp-page-handler="Search">
+            <div class="search-input-group">
+                <input type="number"
+                       class="search-input"
+                       asp-for="ProductId"
+                       placeholder="Enter Product ID (e.g., 1000)"
+                       autofocus />
+                <button type="submit" class="btn-search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.SearchPerformed && Model.ProductInfo != null && Model.WorkerResults.Count > 0)
+    {
+        <!-- ==================== PRODUCT INFO CARD ==================== -->
+        <div class="product-info-card">
+            <div class="product-info-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#fa709a" stroke-width="2" fill="none"/>
+                    <path d="M9 9h6M9 13h6M9 17h4" stroke="#fa709a" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Product Information
+            </div>
+            <div class="product-info-grid">
+                <div class="info-item">
+                    <span class="info-label">Product ID</span>
+                    <span class="info-value">@Model.ProductInfo.Id</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Product Name</span>
+                    <span class="info-value">@Model.ProductInfo.Name</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Production Date</span>
+                    <span class="info-value">@Model.ProductInfo.ProductionDate.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Start Time</span>
+                    <span class="info-value">@(Model.ProductInfo.Start_time?.ToString(@"hh\:mm\:ss") ?? "N/A")</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">End Time</span>
+                    <span class="info-value">@(Model.ProductInfo.End_time?.ToString(@"hh\:mm\:ss") ?? "N/A")</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Expiration Date</span>
+                    <span class="info-value">@Model.ProductInfo.ExpirationDate.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Production Line</span>
+                    <span class="info-value">Line #@Model.ProductInfo.Production_Line</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== WORKERS RESULTS TABLE ==================== -->
+        <div class="results-card">
+            <div class="results-title">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="3.5" stroke="#fa709a" stroke-width="2" fill="none"/>
+                    <path d="M4 20c0-3.5 3-6.5 8-6.5s8 3 8 6.5" stroke="#fa709a" stroke-width="2" fill="none"/>
+                </svg>
+                Workers Who Handled This Batch (@Model.WorkerResults.Count)
+            </div>
+
+            <table class="table-modern">
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Role</th>
+                        <th>Work Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Section</th>
+                        <th>Pipeline</th>
+                        <th>Production Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var worker in Model.WorkerResults)
+                    {
+                        <tr>
+                            <td><strong>@worker.EmployeeID</strong></td>
+                            <td>@worker.EmployeeName</td>
+                            <td><span class="badge-role">@worker.EmployeeRole</span></td>
+                            <td>@worker.WorkDate.ToString("dd/MM/yyyy")</td>
+                            <td>@(worker.StartTime?.ToString(@"hh\:mm\:ss") ?? "N/A")</td>
+                            <td>@(worker.EndTime?.ToString(@"hh\:mm\:ss") ?? "N/A")</td>
+                            <td>@worker.SectionName (ID: @worker.SectionID)</td>
+                            <td>@worker.PipelineName (ID: @worker.PipelineID)</td>
+                            <td>@worker.ProductionRoomPlace</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model.SearchPerformed && (Model.ProductInfo == null || Model.WorkerResults.Count == 0))
+    {
+        <div class="results-card">
+            <div class="no-results">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#e0e0e0" stroke-width="2" fill="none"/>
+                    <path d="M12 8v4M12 16h.01" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <h4>No Results Found</h4>
+                <p>Try searching for a different product ID</p>
+            </div>
+        </div>
+    }
+</div>

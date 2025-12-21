@@ -23,7 +23,7 @@ namespace Afamia_UI.Pages.Admins
 
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostSubmit()
         {
             // Validate production room data
             if (productionRoom == null)
@@ -84,7 +84,7 @@ namespace Afamia_UI.Pages.Admins
                 return Page();
             }
 
-            return RedirectToPage("/ProductionRooms(operations)/ProductionRooms");
+            return RedirectToPage("./ProductionRooms");
         }
     }
 }

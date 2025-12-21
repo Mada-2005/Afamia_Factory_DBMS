@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Admins\ProductionRooms%28operations%29\ProductionLines\PipelineSections\AssignEmployee.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Pages\Admins\Component.razor" />
+    <Content Remove="Pages\Admins\ProductionRooms%28operations%29\ProductionLines\PipelineSections\AssignEmployee.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

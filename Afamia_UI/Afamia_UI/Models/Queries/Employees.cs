@@ -333,7 +333,7 @@ namespace Afamia_UI.Models.Queries
                 using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
                 {
                     con.Open();
-                    string sql = "SELECT TOP 2 * FROM Employee_Phone_numbers WHERE Phone = @phone";
+                    string sql = "SELECT TOP 1 * FROM Employee_Phone_numbers WHERE Phone = @phone";
                     SqlCommand cmd = new SqlCommand(sql, con);
                     cmd.Parameters.AddWithValue("@phone", phone);
 

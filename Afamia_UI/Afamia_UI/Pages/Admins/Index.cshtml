@@ -62,6 +62,11 @@
         background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
     }
 
+    /* Orange gradient for trace card */
+    .stat-card.trace-card::before {
+        background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+    }
+
     /* Colored overlay that appears on hover */
     .stat-card::after {
         content: '';
@@ -81,6 +86,10 @@
 
     .stat-card.room-card::after {
         background: linear-gradient(135deg, rgba(240, 147, 251, 0.05) 0%, rgba(245, 87, 108, 0.05) 100%);
+    }
+
+    .stat-card.trace-card::after {
+        background: linear-gradient(135deg, rgba(250, 112, 154, 0.05) 0%, rgba(254, 225, 64, 0.05) 100%);
     }
 
     /* ==================== CARD HOVER EFFECTS ==================== */
@@ -118,6 +127,11 @@
     .room-card .stat-icon {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);
+    }
+
+    .trace-card .stat-icon {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        box-shadow: 0 8px 20px rgba(250, 112, 154, 0.3);
     }
 
     /* Icon animation on card hover (grows and tilts) */
@@ -160,6 +174,13 @@
 
     .room-card .stat-value {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .trace-card .stat-value {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -222,7 +243,7 @@
     <!-- ==================== STAT CARDS ROW ==================== -->
     <div class="row g-4">
         <!-- EMPLOYEES CARD (Purple) -->
-        <div class="col-12 col-md-6 col-lg-6 fade-in-up" style="animation-delay: 0.1s;">
+        <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.1s;">
             <a asp-page="/Admins/Employees(operations)/Employees" class="stat-card employee-card">
                 <!-- Gradient Icon -->
                 <div class="stat-icon">
@@ -249,7 +270,7 @@
         </div>
 
         <!-- PRODUCTION ROOMS CARD (Pink) -->
-        <div class="col-12 col-md-6 col-lg-6 fade-in-up" style="animation-delay: 0.2s;">
+        <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.2s;">
             <a asp-page="/Admins/ProductionRooms(operations)/ProductionRooms" class="stat-card room-card">
                 <!-- Gradient Icon -->
                 <div class="stat-icon">
@@ -270,6 +291,33 @@
                 <!-- Description with arrow -->
                 <p class="stat-description">
                     <span>View and manage production facilities</span>
+                    <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </p>
+            </a>
+        </div>
+
+        <!-- TRACE PRODUCT CARD (Orange) -->
+        <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.3s;">
+            <a asp-page="/Admins/TraceProduct/TraceProduct" class="stat-card trace-card">
+                <!-- Gradient Icon -->
+                <div class="stat-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="10" cy="10" r="3" stroke="white" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+
+                <div class="stat-label">Product Tracking</div>
+                <h3 class="stat-title">Trace Product</h3>
+
+                <!-- Icon instead of number -->
+                <span class="stat-value">🔍</span>
+
+                <!-- Description with arrow -->
+                <p class="stat-description">
+                    <span>Track product batch and view production details</span>
                     <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>

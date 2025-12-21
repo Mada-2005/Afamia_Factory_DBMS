@@ -15,12 +15,19 @@
 
 </div>
 
-<div class="d-flex justify-content-end mb-3">
-    <a class="btn btn-modern btn-modern-primary" asp-page="\Admins\ProductionRooms(operations)\ProductionLines\PipelineSections\AssignEmployee">
+<div class="d-flex justify-content-end mb-3 gap-2">
+    <a class="btn btn-modern btn-modern-primary" asp-page="/Admins/DailyWorkSchedule(operations)/DailyWorkSchedule" asp-route-pipelineId="@Model.PipelineId">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
             <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
         Assigned Employees
+    </a>
+    <a class="btn btn-modern btn-modern-success" asp-page="/Admins/ProductionRooms(operations)/ProductionLines/AddProduct" asp-route-pipelineId="@Model.PipelineId">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 8px; vertical-align: middle;">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Add Product
     </a>
 </div>
 
