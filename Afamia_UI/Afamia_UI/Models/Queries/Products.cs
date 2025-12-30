@@ -31,9 +31,9 @@ namespace Afamia_UI.Models.Queries
                             ProductionDate = Convert.ToDateTime(reader["Production_Date"]),
                             ExpirationDate = Convert.ToDateTime(reader["Expiration_Date"]),
                             type = Convert.ToInt32(reader["Type"]),
-                            weight = reader.IsDBNull(reader.GetOrdinal("weight")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("weight")),
+                            Batch_Id = Convert.ToInt32(reader["Batch_Id"]),
                             Production_Line = Convert.ToInt32(reader["Product_Line"]),
-                            Customer_Id = Convert.ToInt32(reader["customer_id"]),
+                            Customer_Id = reader.IsDBNull(reader.GetOrdinal("customer_id")) ? 0 : Convert.ToInt32(reader["customer_id"]),
                             Start_time = reader.IsDBNull(reader.GetOrdinal("Start_time")) ? null : (TimeSpan?)reader.GetTimeSpan(reader.GetOrdinal("Start_time")),
                             End_time = reader.IsDBNull(reader.GetOrdinal("End_time")) ? null : (TimeSpan?)reader.GetTimeSpan(reader.GetOrdinal("End_time"))
                         };
@@ -68,9 +68,9 @@ namespace Afamia_UI.Models.Queries
                             ProductionDate = Convert.ToDateTime(reader["Production_Date"]),
                             ExpirationDate = Convert.ToDateTime(reader["Expiration_Date"]),
                             type = Convert.ToInt32(reader["Type"]),
-                            weight = reader.IsDBNull(reader.GetOrdinal("weight")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("weight")),
+                            Batch_Id = Convert.ToInt32(reader["Batch_Id"]),
                             Production_Line = Convert.ToInt32(reader["Product_Line"]),
-                            Customer_Id = Convert.ToInt32(reader["customer_id"]),
+                            Customer_Id = reader.IsDBNull(reader.GetOrdinal("customer_id")) ? 0 : Convert.ToInt32(reader["customer_id"]),
                             Start_time = reader.IsDBNull(reader.GetOrdinal("Start_time")) ? null : (TimeSpan?)reader.GetTimeSpan(reader.GetOrdinal("Start_time")),
                             End_time = reader.IsDBNull(reader.GetOrdinal("End_time")) ? null : (TimeSpan?)reader.GetTimeSpan(reader.GetOrdinal("End_time"))
                         };
@@ -93,17 +93,17 @@ namespace Afamia_UI.Models.Queries
                 using (SqlConnection con = new SqlConnection(db.GetConnectionString()))
                 {
                     con.Open();
-                    string sql = "Insert into Product (ID, Name, Production_Date, Expiration_Date, Type, weight, Product_Line, customer_id, Start_time, End_time) " +
-                                 "values (@ID, @Name, @Production_Date, @Expiration_Date, @Type, @weight, @Product_Line, @customer_id, @Start_time, @End_time)";
+                    string sql = "Insert into Product ( Name, Production_Date, Expiration_Date, Type, Batch_Id, Product_Line, customer_id, Start_time, End_time) " +
+                                 "values ( @Name, @Production_Date, @Expiration_Date, @Type, @Batch_Id, @Product_Line, @customer_id, @Start_time, @End_time)";
                     SqlCommand cmd = new SqlCommand(sql, con);
-                    cmd.Parameters.AddWithValue("@ID", product.Id);
+           
                     cmd.Parameters.AddWithValue("@Name", product.Name ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Production_Date", product.ProductionDate);
                     cmd.Parameters.AddWithValue("@Expiration_Date", product.ExpirationDate);
                     cmd.Parameters.AddWithValue("@Type", product.type);
-                    cmd.Parameters.AddWithValue("@weight", product.weight ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Batch_Id", product.Batch_Id);
                     cmd.Parameters.AddWithValue("@Product_Line", product.Production_Line);
-                    cmd.Parameters.AddWithValue("@customer_id", product.Customer_Id);
+                    cmd.Parameters.AddWithValue("@customer_id", product.Customer_Id == 0 ? (object)DBNull.Value : product.Customer_Id);
                     cmd.Parameters.AddWithValue("@Start_time", product.Start_time ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@End_time", product.End_time ?? (object)DBNull.Value);
                     cmd.ExecuteNonQuery();
@@ -124,16 +124,16 @@ namespace Afamia_UI.Models.Queries
                 {
                     con.Open();
                     string sql = "Update Product Set Name = @Name, Production_Date = @Production_Date, Expiration_Date = @Expiration_Date, " +
-                                 "Type = @Type, weight = @weight, Product_Line = @Product_Line, customer_id = @customer_id, Start_time = @Start_time, End_time = @End_time " +
+                                 "Type = @Type, Batch_Id = @Batch_Id, Product_Line = @Product_Line, customer_id = @customer_id, Start_time = @Start_time, End_time = @End_time " +
                                  "Where Id = @Id";
                     SqlCommand cmd = new SqlCommand(sql, con);
                     cmd.Parameters.AddWithValue("@Name", product.Name ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Production_Date", product.ProductionDate);
                     cmd.Parameters.AddWithValue("@Expiration_Date", product.ExpirationDate);
                     cmd.Parameters.AddWithValue("@Type", product.type);
-                    cmd.Parameters.AddWithValue("@weight", product.weight ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Batch_Id", product.Batch_Id);
                     cmd.Parameters.AddWithValue("@Product_Line", product.Production_Line);
-                    cmd.Parameters.AddWithValue("@customer_id", product.Customer_Id);
+                    cmd.Parameters.AddWithValue("@customer_id", product.Customer_Id == 0 ? (object)DBNull.Value : product.Customer_Id);
                     cmd.Parameters.AddWithValue("@Start_time", product.Start_time ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@End_time", product.End_time ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Id", product.Id);

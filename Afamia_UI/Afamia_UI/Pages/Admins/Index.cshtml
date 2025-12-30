@@ -67,6 +67,11 @@
         background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
     }
 
+    /* Cyan gradient for customer card */
+    .stat-card.customer-card::before {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    }
+
     /* Colored overlay that appears on hover */
     .stat-card::after {
         content: '';
@@ -90,6 +95,10 @@
 
     .stat-card.trace-card::after {
         background: linear-gradient(135deg, rgba(250, 112, 154, 0.05) 0%, rgba(254, 225, 64, 0.05) 100%);
+    }
+
+    .stat-card.customer-card::after {
+        background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(0, 242, 254, 0.05) 100%);
     }
 
     /* ==================== CARD HOVER EFFECTS ==================== */
@@ -132,6 +141,11 @@
     .trace-card .stat-icon {
         background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         box-shadow: 0 8px 20px rgba(250, 112, 154, 0.3);
+    }
+
+    .customer-card .stat-icon {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
     }
 
     /* Icon animation on card hover (grows and tilts) */
@@ -181,6 +195,13 @@
 
     .trace-card .stat-value {
         background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .customer-card .stat-value {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -318,6 +339,34 @@
                 <!-- Description with arrow -->
                 <p class="stat-description">
                     <span>Track product batch and view production details</span>
+                    <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </p>
+            </a>
+        </div>
+
+        <!-- CUSTOMERS CARD (Cyan) -->
+        <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.4s;">
+            <a asp-page="/Admins/Customers(operations)/Customers" class="stat-card customer-card">
+                <!-- Gradient Icon -->
+                <div class="stat-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="9" cy="7" r="4" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <div class="stat-label">Total Registered</div>
+                <h3 class="stat-title">Customers</h3>
+
+                <!-- Number from backend -->
+                <span class="stat-value">@Model.TotalCustomers</span>
+
+                <!-- Description with arrow -->
+                <p class="stat-description">
+                    <span>Manage customer records and information</span>
                     <svg class="stat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>

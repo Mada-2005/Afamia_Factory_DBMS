@@ -9,9 +9,9 @@ namespace Afamia_UI.Pages.Admins.TraceProduct
     public class TraceProductModel : PageModel
     {
         [BindProperty]
-        public int ProductId { get; set; }
+        public int BatchId { get; set; }
 
-        public Product ProductInfo { get; set; }
+        public BatchInfo ProductInfo { get; set; }
         public List<ProductTraceResult> WorkerResults { get; set; } = new List<ProductTraceResult>();
         public string ErrorMessage { get; set; }
         public bool SearchPerformed { get; set; } = false;
@@ -34,38 +34,26 @@ namespace Afamia_UI.Pages.Admins.TraceProduct
         {
             SearchPerformed = true;
 
-            // Validate product ID
-            if (ProductId == 0)
+            // Validate batch ID
+            if (BatchId == 0)
             {
-                ErrorMessage = "Please enter a valid Product ID.";
+                ErrorMessage = "Please enter a valid Batch ID.";
                 return Page();
             }
 
-            // Get product information
-            ProductInfo = prodObj.GetProductById(ProductId);
+            // Get batch information (get one product from the batch since all have same info)
+            ProductInfo = traceQueries.GetBatchInfo(BatchId);
 
             if (ProductInfo == null)
             {
-                ErrorMessage = $"Product with ID {ProductId} not found.";
+                ErrorMessage = $"Batch #{BatchId} not found.";
                 return Page();
             }
 
-            // Check if product has both start and end times
-            if (!ProductInfo.Start_time.HasValue || !ProductInfo.End_time.HasValue)
-            {
-                ErrorMessage = $"Product {ProductId} does not have start time and/or end time recorded. Cannot trace workers.";
-                return Page();
-            }
+            // Get workers who worked on this batch
+            WorkerResults = traceQueries.GetProductionWorkersForBatch(BatchId);
 
-            // Get workers who worked on this product
-            WorkerResults = traceQueries.GetProductionWorkersForProduct(ProductId);
-
-            if (WorkerResults.Count == 0)
-            {
-                ErrorMessage = $"No workers found for product {ProductId}. This could mean no work schedules match the production timeline.";
-                return Page();
-            }
-
+            // No error if no workers found - just display empty or message
             return Page();
         }
     }

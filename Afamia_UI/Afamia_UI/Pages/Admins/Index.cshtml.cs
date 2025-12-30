@@ -10,8 +10,10 @@ namespace Afamia_UI.Pages.Admins
 
         public EmployeesServices empObj { get; set; }
         public ProductionRoomServices prodRoomObj { get; set; }
+        public CustomerServices custObj { get; set; }
         public int TotalActiveEmployees { get; set; }
         public int TotalProductionRooms { get; set; }
+        public int TotalCustomers { get; set; }
 
         public IndexModel(DB db)
         {
@@ -19,6 +21,8 @@ namespace Afamia_UI.Pages.Admins
             TotalActiveEmployees = empObj.GetNumOfActiveEmployees();
             prodRoomObj = new ProductionRoomServices(db);
             TotalProductionRooms = prodRoomObj.GetNumOfProductionRooms();
+            custObj = new CustomerServices(db);
+            TotalCustomers = custObj.GetTotalCustomers();
         }
 
         public void OnGet()

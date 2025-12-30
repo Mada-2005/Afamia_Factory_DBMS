@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill //F //PID 34320)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet run)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill //F //PID 57772)",
+      "Bash(taskkill //F //PID 50396)"
+    ]
+  }
+}

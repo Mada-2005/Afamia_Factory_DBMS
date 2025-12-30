@@ -199,14 +199,18 @@
                 Basic Information
             </div>
 
-            <!-- Product ID + Quantity Row -->
+            <!-- Product ID + Batch ID Row -->
             <div class="row">
+               
                 <div class="col-md-6 form-group-enhanced">
-                    <label asp-for="product.Id" class="label-enhanced">Starting Product ID</label>
-                    <input type="number" class="input-enhanced" asp-for="product.Id" placeholder="Enter starting ID (e.g., 1000)">
-                    <small class="text-muted">IDs will increment automatically for batch creation</small>
+                    <label asp-for="product.Batch_Id" class="label-enhanced">Batch Number</label>
+                    <input type="number" class="input-enhanced" asp-for="product.Batch_Id" placeholder="Enter batch number (e.g., 100)" required>
+                    <small class="text-muted">All products in this batch will have the same batch number</small>
                 </div>
+            </div>
 
+            <!-- Quantity Row -->
+            <div class="row">
                 <div class="col-md-6 form-group-enhanced">
                     <label asp-for="product.Quantity" class="label-enhanced">Batch Quantity</label>
                     <input type="number" class="input-enhanced" asp-for="product.Quantity" placeholder="Enter quantity (max 1000)" value="1">
@@ -214,7 +218,7 @@
                 </div>
             </div>
 
-            <!-- Product Name + Customer ID Row -->
+            <!-- Product Name + Customer Row -->
             <div class="row">
                 <div class="col-md-6 form-group-enhanced">
                     <label asp-for="product.Name" class="label-enhanced">Product Name</label>
@@ -222,8 +226,29 @@
                 </div>
 
                 <div class="col-md-6 form-group-enhanced">
-                    <label asp-for="product.Customer_Id" class="label-enhanced">Customer ID</label>
-                    <input type="number" class="input-enhanced" asp-for="product.Customer_Id" placeholder="Enter customer ID">
+                    <label for="Customer_Id" class="label-enhanced">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="display: inline-block; margin-right: 5px; vertical-align: middle;">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#11998e" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="#11998e" stroke-width="2" fill="none"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#11998e" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Customer (Optional)
+                    </label>
+                    <input type="text"
+                           id="Customer_Id"
+                           name="product.Customer_Id"
+                           list="customerList"
+                           class="input-enhanced"
+                           placeholder="Start typing to search customers... (or leave empty)"
+                           value="@Model.product.Customer_Id">
+                    <datalist id="customerList">
+                        <option value="">-- No Customer --</option>
+                        @foreach (var cust in Model.Customers)
+                        {
+                            <option value="@cust.Id">@cust.FName @cust.LName (ID: @cust.Id)</option>
+                        }
+                    </datalist>
+                    <small class="text-muted">Optional: Select a customer or leave empty for no customer</small>
                 </div>
             </div>
 

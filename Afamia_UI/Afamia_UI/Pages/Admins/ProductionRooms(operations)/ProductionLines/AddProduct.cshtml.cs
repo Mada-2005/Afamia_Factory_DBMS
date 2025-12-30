@@ -14,13 +14,16 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
 
         public string ErrorMessage { get; set; }
         public List<Products_Type> ProductTypes { get; set; } = new List<Products_Type>();
+        public List<Customer> Customers { get; set; } = new List<Customer>();
         public int PipelineId { get; set; }
 
         private ProductServices prodObj { get; set; }
+        private CustomerServices custObj { get; set; }
 
         public AddProductModel(DB db)
         {
             prodObj = new ProductServices(db);
+            custObj = new CustomerServices(db);
         }
 
         public void OnGet(int pipelineId)
@@ -29,6 +32,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             product = new Product();
             product.Production_Line = pipelineId;
             ProductTypes = prodObj.GetAllProductTypes();
+            Customers = custObj.GetAllCustomers();
         }
 
         public IActionResult OnPost()
@@ -38,38 +42,28 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Invalid request. Product data is missing.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
             // Id required
-            if (product.Id == 0)
+            if (product.Batch_Id == 0)
             {
                 ErrorMessage = "Please fill the Product ID field.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
-            // Name required
-            if (string.IsNullOrWhiteSpace(product.Name))
-            {
-                ErrorMessage = "Please enter the product name.";
-                ProductTypes = prodObj.GetAllProductTypes();
-                return Page();
-            }
-
-            // Name length check
-            if (product.Name.Trim().Length > 10)
-            {
-                ErrorMessage = "Product name must be at most 10 characters long.";
-                ProductTypes = prodObj.GetAllProductTypes();
-                return Page();
-            }
+            
+            
 
             // Production Date required
             if (product.ProductionDate == default(DateTime))
             {
                 ErrorMessage = "Please select the production date.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
@@ -78,6 +72,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Please select the expiration date.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
@@ -86,6 +81,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Expiration date must be after production date.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
@@ -94,6 +90,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Please select a product type.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
@@ -103,27 +100,20 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Invalid product type selected.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
-
-            // Auto-assign weight from product type
-            product.weight = (int)selectedType.weight;
 
             // Production Line required
             if (product.Production_Line == 0)
             {
                 ErrorMessage = "Production line is required.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
-            // Customer ID required
-            if (product.Customer_Id == 0)
-            {
-                ErrorMessage = "Please enter the customer ID.";
-                ProductTypes = prodObj.GetAllProductTypes();
-                return Page();
-            }
+            // Customer ID is optional (can be 0 for no customer)
 
             // Start time validation (optional but if provided, must be valid)
             if (product.Start_time.HasValue)
@@ -132,6 +122,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 {
                     ErrorMessage = "Start time must be between 00:00:00 and 23:59:59.";
                     ProductTypes = prodObj.GetAllProductTypes();
+                    Customers = custObj.GetAllCustomers();
                     return Page();
                 }
             }
@@ -143,6 +134,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 {
                     ErrorMessage = "End time must be between 00:00:00 and 23:59:59.";
                     ProductTypes = prodObj.GetAllProductTypes();
+                    Customers = custObj.GetAllCustomers();
                     return Page();
                 }
             }
@@ -154,6 +146,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 {
                     ErrorMessage = "End time must be after start time.";
                     ProductTypes = prodObj.GetAllProductTypes();
+                    Customers = custObj.GetAllCustomers();
                     return Page();
                 }
             }
@@ -163,10 +156,20 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
             {
                 ErrorMessage = "Quantity must be at least 1.";
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 
-            
+            // Batch ID required
+            if (product.Batch_Id == 0)
+            {
+                ErrorMessage = "Please enter the batch number.";
+                ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
+                return Page();
+            }
+
+
 
             // Batch creation - loop through quantity and create products with incremental IDs
             try
@@ -175,23 +178,18 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 for (int i = 0; i < product.Quantity; i++)
                 {
                     // Check if ID already exists
-                    if (prodObj.GetProductById(startId + i) != null)
-                    {
-                        ErrorMessage = $"Product with ID {startId + i} already exists. Batch creation stopped at product #{i + 1}.";
-                        ProductTypes = prodObj.GetAllProductTypes();
-                        return Page();
-                    }
+                    
 
                     Product newProduct = new Product
                     {
-                        Id = startId + i,
+                        
                         Name = product.Name,
                         ProductionDate = product.ProductionDate,
                         ExpirationDate = product.ExpirationDate,
                         type = product.type,
-                        weight = product.weight,
+                        Batch_Id = product.Batch_Id,
                         Production_Line = product.Production_Line,
-                        Customer_Id = product.Customer_Id,
+                        Customer_Id = product.Customer_Id == 0 ? 0 : product.Customer_Id,
                         Start_time = product.Start_time,
                         End_time = product.End_time
                     };
@@ -206,6 +204,7 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 {
                     ErrorMessage = "A product with the same ID already exists.";
                     ProductTypes = prodObj.GetAllProductTypes();
+                    Customers = custObj.GetAllCustomers();
                     return Page();
                 }
 
@@ -214,12 +213,14 @@ namespace Afamia_UI.Pages.Admins.ProductionRooms_operations_.ProductionLines
                 {
                     ErrorMessage = "Related record not found. Make sure the production line and customer exist.";
                     ProductTypes = prodObj.GetAllProductTypes();
+                    Customers = custObj.GetAllCustomers();
                     return Page();
                 }
 
                 // Other DB errors
                 ErrorMessage = "Database error: " + ex.Message;
                 ProductTypes = prodObj.GetAllProductTypes();
+                Customers = custObj.GetAllCustomers();
                 return Page();
             }
 

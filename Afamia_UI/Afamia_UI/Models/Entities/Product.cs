@@ -12,6 +12,7 @@
 
         public int Customer_Id { get; set; }
         public int type { get; set; }
+        public int Batch_Id { get; set; }
 
         public int? weight { get; set; }
         public TimeSpan? Start_time { get; set; }

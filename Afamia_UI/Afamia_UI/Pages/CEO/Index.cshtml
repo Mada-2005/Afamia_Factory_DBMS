@@ -1,4 +1,715 @@
 ﻿@page
 @model Afamia_UI.Pages.CEO.IndexModel
 @{
+    ViewData["Title"] = "CEO Dashboard";
+    var currentMonth = DateTime.Now.ToString("MMMM yyyy");
 }
+
+<style>
+    /* ==================== GLOBAL STYLES ==================== */
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* ==================== HEADER ==================== */
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .dashboard-title {
+        font-size: 48px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 10px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .dashboard-subtitle {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+    }
+
+    /* ==================== METRICS CARDS ==================== */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .metric-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+    }
+
+    .metric-card.primary { --gradient-start: #667eea; --gradient-end: #764ba2; }
+    .metric-card.success { --gradient-start: #56ab2f; --gradient-end: #a8e063; }
+    .metric-card.warning { --gradient-start: #f7971e; --gradient-end: #ffd200; }
+    .metric-card.info { --gradient-start: #00d2ff; --gradient-end: #3a7bd5; }
+    .metric-card.danger { --gradient-start: #f85032; --gradient-end: #e73827; }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        color: white;
+        font-size: 28px;
+    }
+
+    .metric-label {
+        font-size: 14px;
+        color: #7f8c8d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+
+    .metric-value {
+        font-size: 42px;
+        font-weight: 800;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        line-height: 1;
+    }
+
+    .metric-change {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+
+    .metric-change.positive {
+        background: rgba(86, 171, 47, 0.1);
+        color: #56ab2f;
+    }
+
+    .metric-change.negative {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+    }
+
+    /* ==================== CHART SECTIONS ==================== */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 24px;
+        padding: 35px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .chart-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .chart-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 24px;
+    }
+
+    .chart-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    /* ==================== PRODUCTION TREND CHART ==================== */
+    .trend-chart {
+        position: relative;
+        height: 300px;
+        display: flex;
+        align-items: flex-end;
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .trend-bar {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bar-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        position: relative;
+    }
+
+    .bar {
+        width: 100%;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        transition: all 0.3s ease;
+        animation: growUp 1s ease-out;
+    }
+
+    .bar:hover {
+        filter: brightness(1.1);
+        transform: scaleY(1.05);
+    }
+
+    .bar-value {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        font-weight: 700;
+        color: #667eea;
+        white-space: nowrap;
+    }
+
+    .bar-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #7f8c8d;
+        text-align: center;
+    }
+
+    /* ==================== TOP LISTS ==================== */
+    .top-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .list-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .list-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .list-item:hover {
+        transform: translateX(10px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-rank {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        margin-right: 20px;
+        flex-shrink: 0;
+    }
+
+    .list-content {
+        flex: 1;
+    }
+
+    .list-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .list-subtitle {
+        font-size: 13px;
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+
+    .list-value {
+        font-size: 24px;
+        font-weight: 800;
+        color: #667eea;
+        margin-left: auto;
+    }
+
+    /* ==================== PRODUCT TYPE DISTRIBUTION ==================== */
+    .distribution-grid {
+        display: grid;
+        gap: 15px;
+    }
+
+    .distribution-item {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .distribution-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .distribution-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .distribution-count {
+        font-size: 20px;
+        font-weight: 800;
+        color: #667eea;
+    }
+
+    .distribution-bar-container {
+        height: 10px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+
+    .distribution-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        transition: width 1s ease-out;
+        animation: expandWidth 1.5s ease-out;
+    }
+
+    .distribution-percentage {
+        font-size: 13px;
+        font-weight: 600;
+        color: #7f8c8d;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @@keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes growUp {
+        from { transform: scaleY(0); transform-origin: bottom; }
+        to { transform: scaleY(1); transform-origin: bottom; }
+    }
+
+    @@keyframes expandWidth {
+        from { width: 0; }
+    }
+
+    /* ==================== ADMIN MANAGEMENT CARD ==================== */
+    .admin-management-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 24px;
+        padding: 35px 45px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: fadeInUp 0.6s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-management-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .admin-management-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    }
+
+    .admin-card-content {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .admin-card-icon {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+    }
+
+    .admin-card-text h3 {
+        color: white;
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .admin-card-text p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .admin-card-stats {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px 25px;
+        border-radius: 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .admin-count {
+        font-size: 38px;
+        font-weight: 800;
+        color: white;
+        line-height: 1;
+        margin-bottom: 5px;
+    }
+
+    .admin-label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    .btn-manage-admins {
+        background: white;
+        color: #667eea;
+        padding: 16px 35px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-manage-admins:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        color: #764ba2;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @@media (max-width: 768px) {
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-title {
+            font-size: 36px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+        }
+
+        .admin-management-card {
+            flex-direction: column;
+            text-align: center;
+            gap: 25px;
+        }
+
+        .admin-card-content {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <!-- ==================== HEADER ==================== -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Executive Dashboard</h1>
+        <p class="dashboard-subtitle">Monthly Performance Analysis - @currentMonth</p>
+    </div>
+
+    <!-- ==================== ADMIN MANAGEMENT CARD ==================== -->
+    <div class="admin-management-card">
+        <div class="admin-card-content">
+            <div class="admin-card-icon">🔐</div>
+            <div class="admin-card-text">
+                <h3>Admin Account Management</h3>
+                <p>Create and manage administrator accounts</p>
+            </div>
+        </div>
+        <div class="admin-card-stats">
+            <div class="admin-count">@Model.TotalAdmins</div>
+            <div class="admin-label">Total Admins</div>
+        </div>
+        <a href="/CEO/ManageAdmins" class="btn-manage-admins">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Manage Admins
+        </a>
+    </div>
+
+    <!-- ==================== KEY METRICS ==================== -->
+    <div class="metrics-grid">
+        <div class="metric-card primary">
+            <div class="metric-icon">📦</div>
+            <div class="metric-label">Products This Month</div>
+            <div class="metric-value">@Model.Statistics.TotalProductsThisMonth.ToString("N0")</div>
+            @if (Model.Statistics.PercentageChangeProducts != 0)
+            {
+                <span class="metric-change @(Model.Statistics.PercentageChangeProducts > 0 ? "positive" : "negative")">
+                    @(Model.Statistics.PercentageChangeProducts > 0 ? "↑" : "↓") @Math.Abs(Model.Statistics.PercentageChangeProducts).ToString("F1")%
+                    <span style="font-size: 11px; opacity: 0.8;">vs last month</span>
+                </span>
+            }
+        </div>
+
+        <div class="metric-card success">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-label">Batches Completed</div>
+            <div class="metric-value">@Model.Statistics.TotalBatchesThisMonth.ToString("N0")</div>
+            @if (Model.Statistics.PercentageChangeBatches != 0)
+            {
+                <span class="metric-change @(Model.Statistics.PercentageChangeBatches > 0 ? "positive" : "negative")">
+                    @(Model.Statistics.PercentageChangeBatches > 0 ? "↑" : "↓") @Math.Abs(Model.Statistics.PercentageChangeBatches).ToString("F1")%
+                    <span style="font-size: 11px; opacity: 0.8;">vs last month</span>
+                </span>
+            }
+        </div>
+
+        <div class="metric-card warning">
+            <div class="metric-icon">👥</div>
+            <div class="metric-label">Active Customers</div>
+            <div class="metric-value">@Model.Statistics.TotalCustomersThisMonth.ToString("N0")</div>
+        </div>
+
+        <div class="metric-card info">
+            <div class="metric-icon">⚙️</div>
+            <div class="metric-label">Production Lines</div>
+            <div class="metric-value">@Model.Statistics.ActiveProductionLines.ToString("N0")</div>
+        </div>
+
+        <div class="metric-card danger">
+            <div class="metric-icon">👷</div>
+            <div class="metric-label">Total Employees</div>
+            <div class="metric-value">@Model.Statistics.TotalEmployees.ToString("N0")</div>
+        </div>
+    </div>
+
+    <!-- ==================== CHARTS SECTION ==================== -->
+    <div class="charts-grid">
+        <!-- Production Trend Chart -->
+        <div class="chart-card" style="grid-column: span 2;">
+            <div class="chart-header">
+                <div class="chart-icon">📈</div>
+                <h2 class="chart-title">6-Month Production Trend</h2>
+            </div>
+            <div class="trend-chart">
+                @if (Model.Statistics.Last6MonthsProduction.Any())
+                {
+                    var maxProducts = Model.Statistics.Last6MonthsProduction.Max(m => m.TotalProducts);
+                    foreach (var month in Model.Statistics.Last6MonthsProduction)
+                    {
+                        var heightPercentage = maxProducts > 0 ? (double)month.TotalProducts / maxProducts * 100 : 0;
+                        <div class="trend-bar">
+                            <div class="bar-container">
+                                <div class="bar" style="height: @(heightPercentage)%;">
+                                    <span class="bar-value">@month.TotalProducts</span>
+                                </div>
+                            </div>
+                            <div class="bar-label">@month.MonthName.Substring(0, 3)</div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p style="text-align: center; color: #7f8c8d; width: 100%;">No production data available</p>
+                }
+            </div>
+        </div>
+
+        <!-- Top Production Lines -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-icon">🏭</div>
+                <h2 class="chart-title">Top Production Lines</h2>
+            </div>
+            <div class="top-list">
+                @if (Model.Statistics.TopProductionLines.Any())
+                {
+                    int rank = 1;
+                    foreach (var line in Model.Statistics.TopProductionLines)
+                    {
+                        <div class="list-item">
+                            <div class="list-rank">@rank</div>
+                            <div class="list-content">
+                                <div class="list-title">@line.LineName</div>
+                                <div class="list-subtitle">@line.BatchesCompleted batches completed</div>
+                            </div>
+                            <div class="list-value">@line.ProductsProduced</div>
+                        </div>
+                        rank++;
+                    }
+                }
+                else
+                {
+                    <p style="text-align: center; color: #7f8c8d;">No production data available</p>
+                }
+            </div>
+        </div>
+
+        <!-- Top Customers -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-icon">⭐</div>
+                <h2 class="chart-title">Top Customers</h2>
+            </div>
+            <div class="top-list">
+                @if (Model.Statistics.TopCustomersThisMonth.Any())
+                {
+                    int rank = 1;
+                    foreach (var customer in Model.Statistics.TopCustomersThisMonth)
+                    {
+                        <div class="list-item">
+                            <div class="list-rank">@rank</div>
+                            <div class="list-content">
+                                <div class="list-title">@customer.CustomerName</div>
+                                <div class="list-subtitle">@customer.OrderCount orders placed</div>
+                            </div>
+                            <div class="list-value">@customer.TotalProducts</div>
+                        </div>
+                        rank++;
+                    }
+                }
+                else
+                {
+                    <p style="text-align: center; color: #7f8c8d;">No customer data available</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PRODUCT TYPE DISTRIBUTION ==================== -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-icon">🎨</div>
+            <h2 class="chart-title">Product Type Distribution</h2>
+        </div>
+        <div class="distribution-grid">
+            @if (Model.Statistics.ProductTypeBreakdown.Any())
+            {
+                foreach (var type in Model.Statistics.ProductTypeBreakdown)
+                {
+                    <div class="distribution-item">
+                        <div class="distribution-header">
+                            <span class="distribution-name">@type.TypeName</span>
+                            <span class="distribution-count">@type.Count</span>
+                        </div>
+                        <div class="distribution-bar-container">
+                            <div class="distribution-bar" style="width: @type.Percentage.ToString("F1")%;"></div>
+                        </div>
+                        <div class="distribution-percentage">@type.Percentage.ToString("F1")% of total production</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="text-align: center; color: #7f8c8d;">No product type data available</p>
+            }
+        </div>
+    </div>
+</div>
